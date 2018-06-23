@@ -1,8 +1,10 @@
-﻿using System;
+﻿using StartReader.App.Extensiton;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,6 +27,14 @@ namespace StartReader.App
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var i = DataSourceManager.Instance;
+            await i.RefreshAsync();
+            await i.ProviderSources[0].ExecuteAsync(new ValueSet());
         }
     }
 }
