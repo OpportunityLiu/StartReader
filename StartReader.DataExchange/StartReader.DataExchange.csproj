@@ -113,6 +113,10 @@
     <Compile Include="Request\GetBookRequest.cs" />
     <Compile Include="Request\IRequestMessage.cs" />
     <Compile Include="Request\SearchRequest.cs" />
+    <Compile Include="Model\BookDataBrief.cs" />
+    <Compile Include="Model\BookDataDetailed.cs" />
+    <Compile Include="Model\ChapterDataBrief.cs" />
+    <Compile Include="Model\ChapterDataDetailed.cs" />
     <Compile Include="Response\ErrorResponse.cs" />
     <Compile Include="Response\GetBookResponse.cs" />
     <Compile Include="Response\IResponseMessage.cs" />

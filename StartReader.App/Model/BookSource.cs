@@ -1,5 +1,4 @@
-﻿using StartReader.DataExchange.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StartReader.App.Model
 {
-    class Chapter : ChapterDataDetailed
+    class BookSource
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,6 +16,8 @@ namespace StartReader.App.Model
 
         public Book Book { get; set; }
 
-        public BookSource Source { get; set; }
+        public string SourcePFN { get; set; }
+        public string ProviderId { get; set; }
+        public string BookKey { get; set; }
     }
 }

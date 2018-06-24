@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using StartReader.DataExchange.Model;
 using StartReader.DataExchange.Request;
 using System;
 using System.Collections.Generic;
