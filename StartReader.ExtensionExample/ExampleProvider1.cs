@@ -16,7 +16,8 @@ namespace StartReader.ExtensionExample
         {
         }
 
-        protected override Task<GetBookResponse> GetBook(GetBookRequest request) => throw new NotImplementedException();
-        protected override Task<SearchResponse> Search(SearchRequest request) => throw new NotImplementedException();
+        protected override Task<GetBookResponse> GetBookAsync(GetBookRequest request) => throw new NotImplementedException();
+        protected override Task<GetChaptersResponse> GetChaptersAsync(GetChaptersRequest request) => throw new NotImplementedException();
+        protected override Task<SearchResponse> SearchAsync(SearchRequest request) => throw new NotImplementedException();
     }
 }

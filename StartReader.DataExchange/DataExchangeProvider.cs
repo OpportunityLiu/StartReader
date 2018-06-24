@@ -25,10 +25,13 @@ namespace StartReader.DataExchange
                 switch (args.Request.GetMessage())
                 {
                 case SearchRequest search:
-                    response = await Search(search);
+                    response = await SearchAsync(search);
                     break;
                 case GetBookRequest getBook:
-                    response = await GetBook(getBook);
+                    response = await GetBookAsync(getBook);
+                    break;
+                case GetChaptersRequest getChapters:
+                    response = await GetChaptersAsync(getChapters);
                     break;
                 default:
                     response = ErrorResponse.NotImplemented;
@@ -50,7 +53,8 @@ namespace StartReader.DataExchange
             }
         }
 
-        protected abstract Task<SearchResponse> Search(SearchRequest request);
-        protected abstract Task<GetBookResponse> GetBook(GetBookRequest request);
+        protected abstract Task<SearchResponse> SearchAsync(SearchRequest request);
+        protected abstract Task<GetBookResponse> GetBookAsync(GetBookRequest request);
+        protected abstract Task<GetChaptersResponse> GetChaptersAsync(GetChaptersRequest request);
     }
 }

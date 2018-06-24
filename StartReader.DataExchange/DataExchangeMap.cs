@@ -14,11 +14,13 @@ namespace StartReader.DataExchange
             {
                 ["Search"] = typeof(SearchRequest),
                 ["GetBook"] = typeof(GetBookRequest),
+                ["GetChapters"] = typeof(GetChaptersRequest),
             });
             RequestToResponseMap = new ReadOnlyDictionary<Type, Type>(new Dictionary<Type, Type>
             {
                 [typeof(SearchRequest)] = typeof(SearchResponse),
                 [typeof(GetBookRequest)] = typeof(GetBookResponse),
+                [typeof(GetChaptersRequest)] = typeof(GetChaptersResponse),
             });
         }
 

@@ -1,4 +1,5 @@
-﻿using StartReader.App.Extensiton;
+﻿using Opportunity.MvvmUniverse.Services.Navigation;
+using StartReader.App.Extensiton;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,6 +36,8 @@ namespace StartReader.App
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            // start loading operation.
+            var dp = DataSourceManager.Instance;
         }
 
         /// <summary>
@@ -52,6 +55,8 @@ namespace StartReader.App
             {
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();
+
+                Navigator.GetOrCreateForCurrentView().Handlers.Add(rootFrame.AsNavigationHandler());
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -71,7 +76,7 @@ namespace StartReader.App
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(View.MainPage), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
@@ -98,13 +103,12 @@ namespace StartReader.App
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
+            //foreach (var item in DataSourceManager.Instance.ProviderSources)
+            //{
+            //    item.CloseAll();
+            //}
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
-        }
-
-        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
-        {
-
         }
     }
 }

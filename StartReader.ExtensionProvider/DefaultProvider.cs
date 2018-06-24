@@ -29,6 +29,7 @@ namespace StartReader.ExtensionProvider
 
         private void TaskInstance_Canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
+            (this.provider as IDisposable)?.Dispose();
             this.def.Complete();
         }
     }

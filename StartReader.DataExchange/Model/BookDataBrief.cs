@@ -16,5 +16,7 @@ namespace StartReader.DataExchange.Model
         public string Description { get; set; }
 
         public ChapterDataBrief LastestChapter { get; set; }
+
+        public DateTime? LastUpdate { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace StartReader.DataExchange.Request
         string IRequestMessage.Method => "Search";
 
         [JsonRequired]
-        public string Keyword { get; set; }
+        public string Keyword { get; internal set; }
     }
 }

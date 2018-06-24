@@ -64,5 +64,13 @@ namespace StartReader.App.Extensiton
 
         private readonly ObservableList<DataProvider> providers = new ObservableList<DataProvider>();
         public ObservableListView<DataProvider> Providers => this.providers.AsReadOnly();
+
+        public void CloseAll()
+        {
+            foreach (var item in this.providers)
+            {
+                item.Close();
+            }
+        }
     }
 }
