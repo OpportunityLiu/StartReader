@@ -12,25 +12,24 @@ namespace StartReader.ExtensionProvider
     public sealed class DefaultProvider : IBackgroundTask
     {
         private BackgroundTaskDeferral def;
+        private DataExchangeProvider provider;
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
             this.def = taskInstance.GetDeferral();
             taskInstance.Canceled += this.TaskInstance_Canceled;
             var de = (AppServiceTriggerDetails)taskInstance.TriggerDetails;
-            var p = new MiaoBiGeProvider(de.AppServiceConnection);
+            switch (de.Name)
+            {
+            case "miaobige":
+                this.provider = new MiaoBiGeProvider(de.AppServiceConnection);
+                break;
+            }
         }
 
         private void TaskInstance_Canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
             this.def.Complete();
-        }
-    }
-
-    internal sealed class MiaoBiGeProvider : DataExchangeProvider
-    {
-        public MiaoBiGeProvider(AppServiceConnection connection) : base(connection)
-        {
         }
     }
 }

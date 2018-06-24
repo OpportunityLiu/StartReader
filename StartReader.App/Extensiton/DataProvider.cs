@@ -16,6 +16,7 @@ using Windows.Foundation.Collections;
 
 namespace StartReader.App.Extensiton
 {
+    [DebuggerDisplay(@"Id = {Id} DispName = {DisplayName} Service = {AppServiceName}")]
     class DataProvider : ObservableObject
     {
         public string Id { get; }

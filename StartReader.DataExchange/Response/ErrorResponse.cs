@@ -8,6 +8,8 @@ namespace StartReader.DataExchange.Response
 {
     public sealed class ErrorResponse : IResponseMessage
     {
+        public static ErrorResponse NotImplemented { get; } = new ErrorResponse(1, "该方法未实现。");
+
         public int Code { get; }
         public string Message { get; }
 

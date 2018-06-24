@@ -4,10 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.App", "StartReader.App\StartReader.App.csproj", "{E89C4C4C-D61F-480F-91FC-722A070127F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C} = {8DBB14F5-9E30-4F07-960D-771ED310BD9C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.ExtensionProvider", "StartReader.ExtensionProvider\StartReader.ExtensionProvider.csproj", "{49C69C24-CF79-4A50-8FD4-6721AD2AE8C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.DataExchange", "StartReader.DataExchange\StartReader.DataExchange.csproj", "{2C33AF92-6268-47EF-ACD2-321F4657C11F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.ExtensionExample", "StartReader.ExtensionExample\StartReader.ExtensionExample.csproj", "{8DBB14F5-9E30-4F07-960D-771ED310BD9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +78,26 @@ Global
 		{2C33AF92-6268-47EF-ACD2-321F4657C11F}.Release|x64.Build.0 = Release|x64
 		{2C33AF92-6268-47EF-ACD2-321F4657C11F}.Release|x86.ActiveCfg = Release|x86
 		{2C33AF92-6268-47EF-ACD2-321F4657C11F}.Release|x86.Build.0 = Release|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|ARM.ActiveCfg = Debug|ARM
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|ARM.Build.0 = Debug|ARM
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|ARM.Deploy.0 = Debug|ARM
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|x64.ActiveCfg = Debug|x64
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|x64.Build.0 = Debug|x64
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|x64.Deploy.0 = Debug|x64
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|x86.ActiveCfg = Debug|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|x86.Build.0 = Debug|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Debug|x86.Deploy.0 = Debug|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|Any CPU.ActiveCfg = Release|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|ARM.ActiveCfg = Release|ARM
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|ARM.Build.0 = Release|ARM
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|ARM.Deploy.0 = Release|ARM
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|x64.ActiveCfg = Release|x64
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|x64.Build.0 = Release|x64
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|x64.Deploy.0 = Release|x64
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|x86.ActiveCfg = Release|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|x86.Build.0 = Release|x86
+		{8DBB14F5-9E30-4F07-960D-771ED310BD9C}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

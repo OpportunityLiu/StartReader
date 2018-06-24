@@ -1,5 +1,7 @@
-﻿using StartReader.DataExchange.Response;
+﻿using StartReader.DataExchange.Request;
+using StartReader.DataExchange.Response;
 using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 
 namespace StartReader.DataExchange
@@ -12,19 +14,43 @@ namespace StartReader.DataExchange
         {
             this.connection = connection ?? throw new ArgumentNullException(nameof(connection));
             this.connection.RequestReceived += this.Connection_RequestReceived;
-            this.connection.ServiceClosed += this.Connection_ServiceClosed;
-        }
-
-        private void Connection_ServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
-        {
-
         }
 
         private async void Connection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
         {
             var def = args.GetDeferral();
-            await args.Request.SendResponseAsync(new ErrorResponse(-1, "nono"));
-            def.Complete();
+            try
+            {
+                IResponseMessage response;
+                switch (args.Request.GetMessage())
+                {
+                case SearchRequest search:
+                    response = await Search(search);
+                    break;
+                case GetBookRequest getBook:
+                    response = await GetBook(getBook);
+                    break;
+                default:
+                    response = ErrorResponse.NotImplemented;
+                    break;
+                }
+                await args.Request.SendResponseAsync(response);
+            }
+            catch (NotImplementedException)
+            {
+                await args.Request.SendResponseAsync(ErrorResponse.NotImplemented);
+            }
+            catch (Exception ex)
+            {
+                await args.Request.SendResponseAsync(new ErrorResponse(ex.HResult, ex.Message));
+            }
+            finally
+            {
+                def.Complete();
+            }
         }
+
+        protected abstract Task<SearchResponse> Search(SearchRequest request);
+        protected abstract Task<GetBookResponse> GetBook(GetBookRequest request);
     }
 }

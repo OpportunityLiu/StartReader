@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
+  <Identity Name="871631d7-be06-4640-b7b5-7acef89c117f" Publisher="CN=lzy" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="871631d7-be06-4640-b7b5-7acef89c117f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Properties>
+    <DisplayName>StartReader.ExtensionExample</DisplayName>
+    <PublisherDisplayName>lzy</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="StartReader.ExtensionExample.App">
+      <!--AppListEntry="none" 表示隐藏启动器图标-->
+      <uap:VisualElements AppListEntry="none" DisplayName="StartReader.ExtensionExample" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="StartReader.ExtensionExample" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <!--AppExtension 声明，不要修改“Name”属性-->
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension Name="StartReader.DataProviderSource" Id="ExampleSource" DisplayName="示例内容提供程序" Description="示例内容提供程序，可在此基础上进行开发。" PublicFolder="Public">
+            <uap3:Properties>
+              <Providers>
+                <Provider Id="exampleProvider1" DisplayName="示例源1" Url="https://www.example.com/" AppServiceName="StartReader.ExampleSource1" Description="说明文字" />
+                <Provider Id="exampleProvider2" DisplayName="示例源2" Url="https://www.example.com/" AppServiceName="StartReader.ExampleSource2" Description="说明文字" />
+              </Providers>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+        <!--与 示例源1 对应的 AppService，“Name”与 示例源1 的“AppServiceName”相同-->
+        <!--与 示例源2 对应的 AppService-->
+        <uap:Extension Category="windows.appService">
+          <uap:AppService Name="StartReader.ExampleSource1" />
+        </uap:Extension>
+        <uap:Extension Category="windows.appService">
+          <uap:AppService Name="StartReader.ExampleSource2" />
+        </uap:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="startreader.dataprovidersource">
+            <uap:DisplayName>示例数据源</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

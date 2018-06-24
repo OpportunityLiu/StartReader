@@ -15,7 +15,8 @@ using Windows.Foundation.Collections;
 
 namespace StartReader.App.Extensiton
 {
-    class DataProviderSource : ObservableObject
+    [DebuggerDisplay(@"Name = {Extension.DisplayName} PFN = {PackageFamilyName}")]
+    internal sealed class DataProviderSource : ObservableObject
     {
         public DataProviderSource(AppExtension extension)
         {

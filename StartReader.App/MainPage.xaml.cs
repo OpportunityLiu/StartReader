@@ -37,13 +37,21 @@ namespace StartReader.App
             await i.RefreshAsync();
             try
             {
-            await i.ProviderSources[0].Providers[0].ExecuteAsync(new SearchRequest { Keyword = "大王饶命" });
+                await i.ProviderSources[1].Providers[0].ExecuteAsync(new SearchRequest { Keyword = "大王饶命" });
 
             }
             catch (Exception)
             {
             }
-            i.ProviderSources[0].Providers[0].Close();
+            await Task.Delay(1000);
+            try
+            {
+                await i.ProviderSources[0].Providers[0].ExecuteAsync(new SearchRequest { Keyword = "大王饶命" });
+
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

@@ -1,14 +1,11 @@
-﻿using StartReader.App.Extensiton;
+﻿using StartReader.DataExchange;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.AppExtensions;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -20,7 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace StartReader.App
+namespace StartReader.ExtensionExample
 {
     /// <summary>
     /// 提供特定于应用程序的行为，以补充默认的应用程序类。
@@ -102,8 +99,24 @@ namespace StartReader.App
             deferral.Complete();
         }
 
+        private DataExchangeProvider provider;
+
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
+            var def = args.TaskInstance.GetDeferral();
+            args.TaskInstance.Canceled += (s, e) => def.Complete();
+
+            var trigger = (AppServiceTriggerDetails)args.TaskInstance.TriggerDetails;
+
+            switch (trigger.Name)
+            {
+            case "StartReader.ExampleSource1":
+                provider = new ExampleProvider1(trigger.AppServiceConnection); break;
+            case "StartReader.ExampleSource2":
+                provider = new ExampleProvider2(trigger.AppServiceConnection); break;
+            default:
+                break;
+            }
 
         }
     }
