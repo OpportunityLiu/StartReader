@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49C69C24-CF79-4A50-8FD4-6721AD2AE8C6}</ProjectGuid>
-    <OutputType>winmdobj</OutputType>
+    <ProjectGuid>{2C33AF92-6268-47EF-ACD2-321F4657C11F}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StartReader.ExtensionProvider</RootNamespace>
-    <AssemblyName>StartReader.ExtensionProvider</AssemblyName>
+    <RootNamespace>StartReader.DataExchange</RootNamespace>
+    <AssemblyName>StartReader.DataExchange</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
@@ -16,7 +16,6 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <AllowCrossPlatformRetargeting>false</AllowCrossPlatformRetargeting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -107,28 +106,26 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DefaultProvider.cs" />
+    <Compile Include="DataExchangeExtension.cs" />
+    <Compile Include="DataExchangeMap.cs" />
+    <Compile Include="DataExchangeProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\GetBookRequest.cs" />
+    <Compile Include="Request\IRequestMessage.cs" />
+    <Compile Include="Request\SearchRequest.cs" />
+    <Compile Include="Response\ErrorResponse.cs" />
+    <Compile Include="Response\GetBookResponse.cs" />
+    <Compile Include="Response\IResponseMessage.cs" />
+    <Compile Include="Response\SearchResponse.cs" />
+    <EmbeddedResource Include="Properties\StartReader.DataExchange.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack">
-      <Version>1.8.4</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.5</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Opportunity.Helpers.Universal">
-      <Version>1.3.14</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StartReader.DataExchange\StartReader.DataExchange.csproj">
-      <Project>{2c33af92-6268-47ef-acd2-321f4657c11f}</Project>
-      <Name>StartReader.DataExchange</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

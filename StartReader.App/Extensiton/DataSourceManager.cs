@@ -24,6 +24,7 @@ namespace StartReader.App.Extensiton
         {
             this.catalog = AppExtensionCatalog.Open("StartReader.DataProviderSource");
             this.catalog.PackageStatusChanged += this.Catalog_PackageStatusChanged;
+            var ignore = RefreshAsync();
         }
 
         private async void Catalog_PackageStatusChanged(AppExtensionCatalog sender, AppExtensionPackageStatusChangedEventArgs args)

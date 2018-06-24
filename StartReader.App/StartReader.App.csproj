@@ -164,6 +164,10 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StartReader.DataExchange\StartReader.DataExchange.csproj">
+      <Project>{2c33af92-6268-47ef-acd2-321f4657c11f}</Project>
+      <Name>StartReader.DataExchange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StartReader.ExtensionProvider\StartReader.ExtensionProvider.csproj">
       <Project>{49c69c24-cf79-4a50-8fd4-6721ad2ae8c6}</Project>
       <Name>StartReader.ExtensionProvider</Name>

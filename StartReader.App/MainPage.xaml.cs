@@ -1,4 +1,5 @@
 ﻿using StartReader.App.Extensiton;
+using StartReader.DataExchange.Request;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +35,15 @@ namespace StartReader.App
             base.OnNavigatedTo(e);
             var i = DataSourceManager.Instance;
             await i.RefreshAsync();
-            await i.ProviderSources[0].ExecuteAsync(new ValueSet());
+            try
+            {
+            await i.ProviderSources[0].Providers[0].ExecuteAsync(new SearchRequest { Keyword = "大王饶命" });
+
+            }
+            catch (Exception)
+            {
+            }
+            i.ProviderSources[0].Providers[0].Close();
         }
     }
 }

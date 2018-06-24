@@ -61,7 +61,9 @@ namespace StartReader.App.Extensiton
         {
             if (!prop.TryGetValue(childName, out var value))
                 return null;
-            return value as IPropertySet;
+            if (value is IPropertySet ps)
+                return ps;
+            return GetChildren(prop, childName).FirstOrDefault();
         }
 
         public static IPropertySet[] GetChildren(this IPropertySet prop, string childName)

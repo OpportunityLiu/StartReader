@@ -28,9 +28,6 @@ namespace StartReader.App.Extensiton
         private AppExtension extension;
         public AppExtension Extension { get => this.extension; private set => Set(ref this.extension, value); }
 
-        private string packageDisplayName;
-        public string PackageDisplayName { get => this.packageDisplayName; private set => Set(ref this.packageDisplayName, value); }
-
         private bool isAvailable;
         public bool IsAvailable { get => this.isAvailable; set => Set(ref this.isAvailable, value); }
 
@@ -46,7 +43,7 @@ namespace StartReader.App.Extensiton
                 {
                     try
                     {
-                        return new DataProvider(e);
+                        return new DataProvider(this, e);
                     }
                     catch
                     {
@@ -62,49 +59,6 @@ namespace StartReader.App.Extensiton
                 return;
             }
             IsAvailable = true;
-        }
-
-        public async Task<object> ExecuteAsync(ValueSet parameters)
-        {
-            var prop = await this.extension.GetExtensionPropertiesAsync();
-            try
-            {
-                // do app service call
-                using (var connection = new AppServiceConnection())
-                {
-                    // service name was in properties
-                    connection.AppServiceName = "StartReader.DefaultSource";
-
-                    // package Family Name is in the extension
-                    connection.PackageFamilyName = this.PackageFamilyName;
-
-                    // open connection
-                    AppServiceConnectionStatus status = await connection.OpenAsync();
-                    if (status != AppServiceConnectionStatus.Success)
-                    {
-                        throw new InvalidOperationException(status.ToString());
-                    }
-                    else
-                    {
-                        // send request to service
-                        // get response
-                        AppServiceResponse response = await connection.SendMessageAsync(parameters);
-                        if (response.Status == AppServiceResponseStatus.Success)
-                        {
-                            ValueSet message = response.Message as ValueSet;
-                            if (message.ContainsKey("status") && (int)message["status"] == 1)
-                            {
-                                return message["result"];
-                            }
-                        }
-                    }
-                }
-                return null;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
         }
 
         private readonly ObservableList<DataProvider> providers = new ObservableList<DataProvider>();
