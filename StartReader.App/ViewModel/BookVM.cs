@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Opportunity.MvvmUniverse.Collections;
 using Opportunity.MvvmUniverse.Services.Navigation;
 using Opportunity.MvvmUniverse.Views;
@@ -19,32 +20,51 @@ namespace StartReader.App.ViewModel
     {
         static BookVM()
         {
-            ViewModelFactory.Register(s => new BookVM(JsonConvert.DeserializeObject<Book>(s)));
+            ViewModelFactory.Register(s => new BookVM(int.Parse(s)));
         }
 
-        private BookVM(Book book)
+        private BookVM(int bookId)
         {
-            this.Book = book;
             Task.Run(async () =>
             {
-                this.Detailed = (await Book.CurrentSource.FindSource().ExecuteAsync(new GetBookRequest
+                using (var bs = BookShelf.Create())
                 {
-                    BookKey = book.CurrentSource.BookKey,
-                })).BookData;
+                    this.Book = bs.Books.Include(b => b.Sources).Include(b => b.ChaptersData).First(b => b.Id == bookId);
+                    var source = this.book.Sources.First(s => s.IsCurrent);
+                    var data = await source.FindSource().ExecuteAsync(new GetBookRequest { BookKey = source.BookKey });
+                    JsonConvert.PopulateObject(JsonConvert.SerializeObject(data.BookData), this.book);
+                    var newChpData = new List<Chapter>();
+                    var i = 0;
+                    foreach (var item in this.book.Chapters)
+                    {
+                        newChpData.Add(new Chapter
+                        {
+                            Index = i,
+                            Book = this.book,
+                            Preview = item.Preview,
+                            Source = source,
+                            UpdateTime = item.UpdateTime,
+                            Title = item.Title,
+                            WordCount = item.WordCount,
+                        });
+                        i++;
+                    }
+                    this.book.ChaptersData.Update(newChpData, (o, n) => o.Index.CompareTo(n.Index), (existChp, newChp) =>
+                    {
+                        bs.Entry(existChp).CurrentValues.SetValues(newChp);
+                    });
+                    bs.SaveChanges();
+                }
+                OnPropertyChanged(nameof(Book));
             });
         }
 
-        public Book Book { get; }
+        private Book book;
+        public Book Book { get => this.book; set => Set(ref this.book, value); }
 
-        private BookDataDetailed detailed;
-        public BookDataDetailed Detailed { get => this.detailed; set => Set(ref this.detailed, value); }
-
-        public async void Open(ChapterDataBrief chapter)
+        public async void Open(Chapter chapter)
         {
-            var c = JsonConvert.DeserializeObject<Chapter>(JsonConvert.SerializeObject(chapter));
-            c.Book = Book;
-            c.Source = Book.CurrentSource;
-            await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), JsonConvert.SerializeObject(c));
+            await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), chapter.Book.Id + " " + chapter.Index);
         }
 
     }

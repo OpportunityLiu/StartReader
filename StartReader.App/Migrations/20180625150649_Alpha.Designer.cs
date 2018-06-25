@@ -8,8 +8,8 @@ using StartReader.App.Model;
 namespace StartReader.App.Migrations
 {
     [DbContext(typeof(BookShelf))]
-    [Migration("20180625093443_Alpha1")]
-    partial class Alpha1
+    [Migration("20180625150649_Alpha")]
+    partial class Alpha
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,8 +28,6 @@ namespace StartReader.App.Migrations
 
                     b.Property<byte[]>("CoverData");
 
-                    b.Property<int>("CurrentSourceId");
-
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsFinished");
@@ -43,8 +41,6 @@ namespace StartReader.App.Migrations
                         .HasColumnName("CoverUri");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrentSourceId");
 
                     b.HasIndex("Title", "Author")
                         .IsUnique();
@@ -65,6 +61,8 @@ namespace StartReader.App.Migrations
                     b.Property<string>("ExtensionId")
                         .IsRequired();
 
+                    b.Property<bool>("IsCurrent");
+
                     b.Property<string>("PackageFamilyName")
                         .IsRequired();
 
@@ -72,13 +70,16 @@ namespace StartReader.App.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("BookSource");
+                    b.HasIndex("BookKey");
+
+                    b.HasIndex("ExtensionId", "PackageFamilyName");
+
+                    b.ToTable("BookSources");
                 });
 
             modelBuilder.Entity("StartReader.App.Model.Chapter", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Index");
 
                     b.Property<int>("BookId");
 
@@ -93,21 +94,13 @@ namespace StartReader.App.Migrations
 
                     b.Property<int>("WordCount");
 
-                    b.HasKey("Id");
+                    b.HasKey("Index", "BookId");
 
                     b.HasIndex("BookId");
 
                     b.HasIndex("SourceId");
 
-                    b.ToTable("Chapter");
-                });
-
-            modelBuilder.Entity("StartReader.App.Model.Book", b =>
-                {
-                    b.HasOne("StartReader.App.Model.BookSource", "CurrentSource")
-                        .WithMany()
-                        .HasForeignKey("CurrentSourceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.ToTable("Chapters");
                 });
 
             modelBuilder.Entity("StartReader.App.Model.BookSource", b =>

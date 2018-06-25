@@ -11,9 +11,8 @@ namespace StartReader.App.Model
 {
     class Chapter : ChapterDataDetailed
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Index { get; set; }
 
         [Required]
         public Book Book { get; set; }

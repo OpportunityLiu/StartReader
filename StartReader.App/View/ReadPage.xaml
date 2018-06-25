@@ -11,7 +11,7 @@
   <Grid>
     <ScrollViewer>
       <RichTextBlock x:Name="rtbContent"
-                     DataContext="{x:Bind ViewModel.Detailed.Content, Mode=OneWay}"
+                     DataContext="{x:Bind ViewModel.Chapter.Content, Mode=OneWay}"
                      DataContextChanged="rtbContent_DataContextChanged" />
     </ScrollViewer>
   </Grid>

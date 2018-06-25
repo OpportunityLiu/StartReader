@@ -155,7 +155,7 @@ namespace StartReader.ExtensionProvider
                         Title = title.GetInnerText(),
                         Author = author.GetInnerText(),
                         Key = key,
-                        CoverUri = image?.GetAttribute("src", BaseUri, null),
+                        CoverUri = image?.GetAttribute("_src", BaseUri, null),
                         Description = des.GetInnerText(),
                         WordCount = int.Parse(wordCount.GetInnerText()),
                         Tags = tags.Select(n => n.GetInnerText()).ToArray(),

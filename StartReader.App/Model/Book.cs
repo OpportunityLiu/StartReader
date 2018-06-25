@@ -1,4 +1,5 @@
-﻿using StartReader.DataExchange.Model;
+﻿using Opportunity.MvvmUniverse.Collections;
+using StartReader.DataExchange.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,12 +17,9 @@ namespace StartReader.App.Model
         public int Id { get; set; }
 
         [Required]
-        public BookSource CurrentSource { get; set; }
+        public ObservableList<BookSource> Sources { get; } = new ObservableList<BookSource>();
 
         [Required]
-        public List<BookSource> Sources { get; private set; }
-
-        [Required]
-        public List<Chapter> ChaptersData { get; private set; }
+        public ObservableList<Chapter> ChaptersData { get; } = new ObservableList<Chapter>();
     }
 }

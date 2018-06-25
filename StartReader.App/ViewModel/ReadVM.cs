@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Opportunity.MvvmUniverse.Views;
 using StartReader.App.Model;
@@ -12,26 +14,33 @@ namespace StartReader.App.ViewModel
     {
         static ReadVM()
         {
-            ViewModelFactory.Register(s => new ReadVM(JsonConvert.DeserializeObject<Chapter>(s)));
-        }
-
-        public ReadVM(Chapter chapter)
-        {
-            this.Chapter = chapter;
-            Task.Run(async () =>
+            ViewModelFactory.Register(s =>
             {
-                this.Detailed = (await Chapter.Source.FindSource().ExecuteAsync(new GetChaptersRequest
-                {
-                    BookKey = Chapter.Source.BookKey,
-                    ChapterKeys = new[] { Chapter.Key },
-                })).Chapters[0];
+                var ss = s.Split();
+                return new ReadVM(int.Parse(ss[0]), int.Parse(ss[1]));
             });
         }
 
-        public Chapter Chapter { get; }
+        public ReadVM(int bookId, int chapterIndex)
+        {
+            Task.Run(async () =>
+            {
+                using (var bs = BookShelf.Create())
+                {
+                    this.Chapter = bs.Chapters.Include(c => c.Book).First(c => c.Book.Id == bookId && c.Index == chapterIndex);
+                    var detail = (await Chapter.Source.FindSource().ExecuteAsync(new GetChaptersRequest
+                    {
+                        BookKey = Chapter.Source.BookKey,
+                        ChapterKeys = new[] { Chapter.Key },
+                    })).Chapters[0];
+                    bs.Entry(this.chapter).CurrentValues.SetValues(detail);
+                    bs.SaveChanges();
+                }
+            });
+        }
 
-        private ChapterDataDetailed detailed;
-        public ChapterDataDetailed Detailed { get => this.detailed; set => Set(ref this.detailed, value); }
+        private Chapter chapter;
+        public Chapter Chapter { get => this.chapter; set => Set(ref this.chapter, value); }
 
     }
 }

@@ -19,6 +19,9 @@ namespace StartReader.App.Model
         public Book Book { get; set; }
 
         [Required]
+        public bool IsCurrent { get; set; }
+
+        [Required]
         public string PackageFamilyName { get; set; }
 
         [Required]

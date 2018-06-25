@@ -1,4 +1,5 @@
 ﻿using Opportunity.MvvmUniverse.Views;
+using StartReader.App.Model;
 using StartReader.App.ViewModel;
 using StartReader.DataExchange.Model;
 using System;
@@ -40,7 +41,7 @@ namespace StartReader.App.View
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModel.Open((ChapterDataBrief)e.ClickedItem);
+            ViewModel.Open((Chapter)e.ClickedItem);
         }
     }
 }

@@ -12,7 +12,18 @@ namespace StartReader.App.Model
 {
     class BookShelf : DbContext
     {
+        public static BookShelf Create()
+        {
+            var r = new BookShelf();
+            r.Database.EnsureCreated();
+            return r;
+        }
+
+        public BookShelf() { }
+
         public DbSet<Book> Books { get; private set; }
+        public DbSet<Chapter> Chapters { get; private set; }
+        public DbSet<BookSource> BookSources { get; private set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,20 +37,21 @@ namespace StartReader.App.Model
                         RelationalEventId.PossibleUnintendedUseOfEqualsWarning)
                     .Throw(
                         CoreEventId.IncludeIgnoredWarning,
-                        CoreEventId.SensitiveDataLoggingEnabledWarning,
-                        CoreEventId.ModelValidationWarning));
+                        CoreEventId.SensitiveDataLoggingEnabledWarning));
 #endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookSource>().HasOne(s => s.Book).WithMany(b => b.Sources).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<BookSource>().HasIndex(s => s.BookKey);
+            modelBuilder.Entity<BookSource>().HasIndex(s => new { s.ExtensionId, s.PackageFamilyName });
 
-            modelBuilder.Entity<Book>().HasOne(b => b.CurrentSource);
             modelBuilder.Entity<Book>().Property<string>("coverUri").HasColumnName(nameof(Book.CoverUri));
             modelBuilder.Entity<Book>().HasIndex(b => new { b.Title, b.Author }).IsUnique();
 
-            modelBuilder.Entity<Book>().HasMany(b => b.ChaptersData).WithOne(c => c.Book).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Chapter>().HasOne(c => c.Book).WithMany(b => b.ChaptersData).HasForeignKey("BookId").OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Chapter>().HasKey(nameof(Chapter.Index), "BookId");
         }
     }
 }

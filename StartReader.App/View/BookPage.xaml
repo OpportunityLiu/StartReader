@@ -6,16 +6,17 @@
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:model="using:StartReader.DataExchange.Model"
+                xmlns:model1="using:StartReader.App.Model"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Grid>
-    <ListView ItemsSource="{x:Bind ViewModel.Detailed.Chapters, Mode=OneWay}"
+    <ListView ItemsSource="{x:Bind ViewModel.Book.ChaptersData, Mode=OneWay}"
               IsItemClickEnabled="True"
               ItemClick="ListView_ItemClick"
               Header="{x:Bind ViewModel.Book.Title, Mode=OneWay}">
       <ListView.ItemTemplate>
-        <DataTemplate x:DataType="model:ChapterDataBrief">
+        <DataTemplate x:DataType="model1:Chapter">
           <TextBlock Text="{x:Bind Title}" />
         </DataTemplate>
       </ListView.ItemTemplate>

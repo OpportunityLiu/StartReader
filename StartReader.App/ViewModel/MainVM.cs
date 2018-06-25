@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Opportunity.MvvmUniverse.Collections;
 using Opportunity.MvvmUniverse.Services.Navigation;
 using Opportunity.MvvmUniverse.Views;
@@ -49,15 +50,44 @@ namespace StartReader.App.ViewModel
 
         public async void Open(BookDataBrief book)
         {
-            var b = JsonConvert.DeserializeObject<Book>(JsonConvert.SerializeObject(book));
-            var dc = SearchResult[book];
-            b.CurrentSource = new BookSource
+            using (var bs = BookShelf.Create())
             {
-                BookKey = book.Key,
-                ExtensionId = dc.ExtensionId,
-                PackageFamilyName = dc.PackageFamilyName,
-            };
-            await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), JsonConvert.SerializeObject(b));
+                var existBook = bs.Books.Include(b => b.Sources).FirstOrDefault(b => b.Title == book.Title && b.Author == book.Author);
+                var dc = SearchResult[book];
+                var newBook = JsonConvert.DeserializeObject<Book>(JsonConvert.SerializeObject(book));
+                var newSource = new BookSource
+                {
+                    Book = existBook,
+                    IsCurrent = true,
+                    BookKey = book.Key,
+                    ExtensionId = dc.ExtensionId,
+                    PackageFamilyName = dc.PackageFamilyName,
+                };
+                if (existBook is null)
+                {
+                    newBook.Sources.Add(newSource);
+                    bs.Books.Add(newBook);
+                }
+                else
+                {
+                    newBook.Id = existBook.Id;
+                    bs.Entry(existBook).CurrentValues.SetValues(newBook);
+                    var existSource = existBook.Sources.FirstOrDefault(s
+                        => s.ExtensionId == newSource.ExtensionId
+                        && s.PackageFamilyName == newSource.PackageFamilyName);
+                    if (existSource is null)
+                        existBook.Sources.Add(newSource);
+                    else
+                    {
+                        var oldCurrentSource = existBook.Sources.First(s => s.IsCurrent);
+                        oldCurrentSource.IsCurrent = false;
+                        newSource.Id = existSource.Id;
+                        bs.Entry(existSource).CurrentValues.SetValues(newSource);
+                    }
+                }
+                bs.SaveChanges();
+                await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), (existBook ?? newBook).Id.ToString());
+            }
         }
 
         public ObservableDictionary<BookDataBrief, DataSource> SearchResult { get; } = new ObservableDictionary<BookDataBrief, DataSource>();
