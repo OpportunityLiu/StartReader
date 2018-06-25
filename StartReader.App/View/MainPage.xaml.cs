@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -23,11 +24,11 @@ namespace StartReader.App.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
+    [ViewOf(typeof(MainVM))]
     public sealed partial class MainPage : MvvmPage
     {
         public MainPage()
         {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(MainVM).TypeHandle);
             this.InitializeComponent();
         }
 
@@ -46,6 +47,12 @@ namespace StartReader.App.View
         private void lv_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModel.Open((BookDataBrief)e.ClickedItem);
+        }
+
+        private async void lv2_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            await ViewModel.DataSourceManager.RequestRemovePackageAsync((Extensiton.DataSource)e.ClickedItem);
+
         }
     }
 }

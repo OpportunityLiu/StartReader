@@ -12,17 +12,13 @@ namespace StartReader.DataExchange.Request
     {
         [JsonIgnore]
         string Method { get; }
-    }
-
-    public abstract class RequestMessageBase
-    {
         [JsonRequired]
-        public string ProviderId { get; internal set; }
+        string ProviderId { get; }
     }
 
     public interface IRequestMessage<TRequest, TResponse> : IRequestMessage
-        where TRequest : IRequestMessage<TRequest, TResponse>
-        where TResponse : IResponseMessage<TRequest, TResponse>
+        where TRequest : RequestMessageBase, IRequestMessage<TRequest, TResponse>
+        where TResponse : ResponseMessageBase, IResponseMessage<TRequest, TResponse>
     {
     }
 }

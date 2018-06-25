@@ -9,6 +9,10 @@
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Grid>
-
+    <ScrollViewer>
+      <RichTextBlock x:Name="rtbContent"
+                     DataContext="{x:Bind ViewModel.Detailed.Content, Mode=OneWay}"
+                     DataContextChanged="rtbContent_DataContextChanged" />
+    </ScrollViewer>
   </Grid>
 </views:MvvmPage>

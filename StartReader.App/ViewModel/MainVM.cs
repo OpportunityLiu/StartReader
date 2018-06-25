@@ -3,6 +3,7 @@ using Opportunity.MvvmUniverse.Collections;
 using Opportunity.MvvmUniverse.Services.Navigation;
 using Opportunity.MvvmUniverse.Views;
 using StartReader.App.Extensiton;
+using StartReader.App.Model;
 using StartReader.App.View;
 using StartReader.DataExchange.Model;
 using StartReader.DataExchange.Request;
@@ -21,35 +22,44 @@ namespace StartReader.App.ViewModel
             ViewModelFactory.Register(s => new MainVM());
         }
 
+        private MainVM()
+        {
+        }
+
         internal async void Search(string queryText)
         {
             var req = new SearchRequest { Keyword = queryText.Trim() };
             SearchResult.Clear();
-            foreach (var item in DataSourceManager.Instance.ProviderSources)
+            foreach (var item in DataSourceManager.Instance.Sources)
             {
                 if (!item.IsAvailable)
                     continue;
-                foreach (var provider in item.Providers)
+                try
                 {
-                    if (!provider.IsAvailable)
-                        continue;
-                    try
+                    foreach (var book in (await item.ExecuteAsync(req).ConfigureAwait(false)).Books)
                     {
-                        foreach (var book in (await provider.ExecuteAsync(req).ConfigureAwait(false)).Books)
-                        {
-                            SearchResult.Add(book);
-                        }
+                        SearchResult.Add(book, item);
                     }
-                    catch { }
                 }
+                catch { }
             }
         }
 
+        internal DataSourceManager DataSourceManager => DataSourceManager.Instance;
+
         public async void Open(BookDataBrief book)
         {
-            await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), JsonConvert.SerializeObject(book));
+            var b = JsonConvert.DeserializeObject<Book>(JsonConvert.SerializeObject(book));
+            var dc = SearchResult[book];
+            b.CurrentSource = new BookSource
+            {
+                BookKey = book.Key,
+                ExtensionId = dc.ExtensionId,
+                PackageFamilyName = dc.PackageFamilyName,
+            };
+            await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), JsonConvert.SerializeObject(b));
         }
 
-        public ObservableList<BookDataBrief> SearchResult { get; } = new ObservableList<BookDataBrief>();
+        public ObservableDictionary<BookDataBrief, DataSource> SearchResult { get; } = new ObservableDictionary<BookDataBrief, DataSource>();
     }
 }

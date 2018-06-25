@@ -37,8 +37,9 @@ namespace StartReader.App.Model
             modelBuilder.Entity<Book>().HasOne(b => b.CurrentSource);
             modelBuilder.Entity<Book>().HasIndex(b => b.Title);
             modelBuilder.Entity<Book>().HasIndex(b => b.Author);
-            modelBuilder.Entity<Book>().Ignore(b => b.LastestChapter);
             modelBuilder.Entity<Book>().HasMany(b => b.Chapters).WithOne(c => c.Book).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Book>().Property<string>("coverUri").HasColumnName(nameof(Book.CoverUri));
+            modelBuilder.Entity<Book>().Ignore(b => b.CoverUri);
         }
     }
 }

@@ -9,11 +9,12 @@ namespace StartReader.DataExchange.Response
 {
     public interface IResponseMessage
     {
+
     }
 
     public interface IResponseMessage<TRequest, TResponse> : IResponseMessage
-        where TRequest : IRequestMessage<TRequest, TResponse>
-        where TResponse : IResponseMessage<TRequest, TResponse>
+        where TRequest : RequestMessageBase, IRequestMessage<TRequest, TResponse>
+        where TResponse : ResponseMessageBase, IResponseMessage<TRequest, TResponse>
     {
     }
 }

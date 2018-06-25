@@ -8,8 +8,8 @@ using StartReader.App.Model;
 namespace StartReader.App.Migrations
 {
     [DbContext(typeof(BookShelf))]
-    [Migration("20180624123131_TestMig")]
-    partial class TestMig
+    [Migration("20180625083858_Alpha1")]
+    partial class Alpha1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,15 +23,22 @@ namespace StartReader.App.Migrations
 
                     b.Property<string>("AlternativeTitle");
 
-                    b.Property<string>("Author");
+                    b.Property<string>("Author")
+                        .IsRequired();
 
-                    b.Property<int?>("CurrentSourceId");
+                    b.Property<byte[]>("CoverData");
+
+                    b.Property<int>("CurrentSourceId");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Key");
+                    b.Property<bool>("IsFinished");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<string>("coverUri")
+                        .HasColumnName("CoverUri");
 
                     b.HasKey("Id");
 
@@ -49,13 +56,16 @@ namespace StartReader.App.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BookId");
+                    b.Property<int>("BookId");
 
-                    b.Property<string>("BookKey");
+                    b.Property<string>("BookKey")
+                        .IsRequired();
 
-                    b.Property<string>("ProviderId");
+                    b.Property<string>("ExtensionId")
+                        .IsRequired();
 
-                    b.Property<string>("SourcePFN");
+                    b.Property<string>("PackageFamilyName")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -69,21 +79,24 @@ namespace StartReader.App.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BookId");
+                    b.Property<int>("BookId");
 
-                    b.Property<string>("BookKey");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
-                    b.Property<string>("Content");
-
-                    b.Property<string>("Discriminator");
-
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .IsRequired();
 
                     b.Property<string>("Preview");
 
-                    b.Property<int?>("SourceId");
+                    b.Property<int>("SourceId");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<DateTime?>("UpdateTime");
+
+                    b.Property<int>("WordCount");
 
                     b.HasKey("Id");
 
@@ -92,15 +105,14 @@ namespace StartReader.App.Migrations
                     b.HasIndex("SourceId");
 
                     b.ToTable("Chapter");
-
-                    b.HasDiscriminator().HasValue("Chapter");
                 });
 
             modelBuilder.Entity("StartReader.App.Model.Book", b =>
                 {
                     b.HasOne("StartReader.App.Model.BookSource", "CurrentSource")
                         .WithMany()
-                        .HasForeignKey("CurrentSourceId");
+                        .HasForeignKey("CurrentSourceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("StartReader.App.Model.BookSource", b =>
@@ -120,7 +132,8 @@ namespace StartReader.App.Migrations
 
                     b.HasOne("StartReader.App.Model.BookSource", "Source")
                         .WithMany()
-                        .HasForeignKey("SourceId");
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

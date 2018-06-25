@@ -5,10 +5,20 @@
                 xmlns:local="using:StartReader.App.View"
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:model="using:StartReader.DataExchange.Model"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Grid>
-    <TextBlock Text="{x:Bind ViewModel.Book.Title, Mode=OneWay}" />
+    <ListView ItemsSource="{x:Bind ViewModel.Detailed.Chapters, Mode=OneWay}"
+              IsItemClickEnabled="True"
+              ItemClick="ListView_ItemClick"
+              Header="{x:Bind ViewModel.Book.Title, Mode=OneWay}">
+      <ListView.ItemTemplate>
+        <DataTemplate x:DataType="model:ChapterDataBrief">
+          <TextBlock Text="{x:Bind Title}" />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
   </Grid>
 </views:MvvmPage>

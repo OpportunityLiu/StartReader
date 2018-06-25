@@ -11,6 +11,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -22,6 +23,7 @@ namespace StartReader.App.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
+    [ViewOf(typeof(ReadVM))]
     public sealed partial class ReadPage : MvvmPage
     {
         public ReadPage()
@@ -36,5 +38,16 @@ namespace StartReader.App.View
         }
 
         new ReadVM ViewModel { get => (ReadVM)base.ViewModel; set => base.ViewModel = value; }
+
+        private void rtbContent_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            var content = args.NewValue.ToString().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var s = (RichTextBlock)sender;
+            s.Blocks.Clear();
+            foreach (var item in content)
+            {
+                s.Blocks.Add(new Paragraph { Inlines = { new Run { Text = item } }, Margin = new Thickness(0, 0, 0, 12) });
+            }
+        }
     }
 }

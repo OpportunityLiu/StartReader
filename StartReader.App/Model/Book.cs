@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace StartReader.App.Model
 {
-    class Book : BookDataBrief
+    class Book : BookDataOutline
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Required]
         public BookSource CurrentSource { get; set; }
 
         public List<BookSource> Sources { get; set; } = new List<BookSource>();

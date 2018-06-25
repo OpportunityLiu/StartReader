@@ -1,5 +1,6 @@
 ﻿using Opportunity.MvvmUniverse.Views;
 using StartReader.App.ViewModel;
+using StartReader.DataExchange.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,11 +23,11 @@ namespace StartReader.App.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
+    [ViewOf(typeof(BookVM))]
     public sealed partial class BookPage : MvvmPage
     {
         public BookPage()
         {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(BookVM).TypeHandle);
             this.InitializeComponent();
         }
 
@@ -36,5 +37,10 @@ namespace StartReader.App.View
         }
 
         new BookVM ViewModel { get => (BookVM)base.ViewModel; set => base.ViewModel = value; }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.Open((ChapterDataBrief)e.ClickedItem);
+        }
     }
 }

@@ -28,9 +28,8 @@
         <uap3:Extension Category="windows.appExtension">
           <uap3:AppExtension Name="StartReader.DataProviderSource" Id="DefaultSource" DisplayName="内置内容提供程序" Description="本应用内置的内容提供程序，提供了一些数据源。" PublicFolder="Public">
             <uap3:Properties>
-              <Providers>
-                <Provider Id="miaobige" DisplayName="妙笔阁" Url="https://www.miaobige.com/" AppServiceName="miaobige" />
-              </Providers>
+              <Url>https://www.miaobige.com/</Url>
+              <AppService>miaobige</AppService>
             </uap3:Properties>
           </uap3:AppExtension>
         </uap3:Extension>

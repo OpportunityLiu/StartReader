@@ -15,8 +15,10 @@ namespace StartReader.App.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Required]
         public Book Book { get; set; }
 
+        [Required]
         public BookSource Source { get; set; }
     }
 }

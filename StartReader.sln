@@ -14,7 +14,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.DataExchange", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.ExtensionExample", "StartReader.ExtensionExample\StartReader.ExtensionExample.csproj", "{8DBB14F5-9E30-4F07-960D-771ED310BD9C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "StartReader.DataExchange.Schema", "StartReader.DataExchange.Schema\StartReader.DataExchange.Schema.shproj", "{5D1ECD8C-2C6B-4B69-8769-6851483DBF0D}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		StartReader.DataExchange.Schema\StartReader.DataExchange.Schema.projitems*{2c33af92-6268-47ef-acd2-321f4657c11f}*SharedItemsImports = 4
+		StartReader.DataExchange.Schema\StartReader.DataExchange.Schema.projitems*{5d1ecd8c-2c6b-4b69-8769-6851483dbf0d}*SharedItemsImports = 13
+		StartReader.DataExchange.Schema\StartReader.DataExchange.Schema.projitems*{e89c4c4c-d61f-480f-91fc-722a070127f2}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM

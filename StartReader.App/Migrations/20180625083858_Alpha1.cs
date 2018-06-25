@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StartReader.App.Migrations
 {
-    public partial class TestMig : Migration
+    public partial class Alpha1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,10 +14,10 @@ namespace StartReader.App.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BookId = table.Column<int>(nullable: true),
-                    BookKey = table.Column<string>(nullable: true),
-                    ProviderId = table.Column<string>(nullable: true),
-                    SourcePFN = table.Column<string>(nullable: true)
+                    BookId = table.Column<int>(nullable: false),
+                    BookKey = table.Column<string>(nullable: false),
+                    ExtensionId = table.Column<string>(nullable: false),
+                    PackageFamilyName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,11 +31,13 @@ namespace StartReader.App.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AlternativeTitle = table.Column<string>(nullable: true),
-                    Author = table.Column<string>(nullable: true),
-                    CurrentSourceId = table.Column<int>(nullable: true),
+                    Author = table.Column<string>(nullable: false),
+                    CoverData = table.Column<byte[]>(nullable: true),
+                    CurrentSourceId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Key = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true)
+                    IsFinished = table.Column<bool>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
+                    CoverUri = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,7 +47,7 @@ namespace StartReader.App.Migrations
                         column: x => x.CurrentSourceId,
                         principalTable: "BookSource",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,14 +56,14 @@ namespace StartReader.App.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BookId = table.Column<int>(nullable: true),
-                    BookKey = table.Column<string>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: true),
-                    Key = table.Column<string>(nullable: true),
+                    BookId = table.Column<int>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    Key = table.Column<string>(nullable: false),
                     Preview = table.Column<string>(nullable: true),
-                    SourceId = table.Column<int>(nullable: true),
-                    Title = table.Column<string>(nullable: true)
+                    SourceId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: true),
+                    WordCount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,7 +79,7 @@ namespace StartReader.App.Migrations
                         column: x => x.SourceId,
                         principalTable: "BookSource",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
