@@ -41,9 +41,11 @@ namespace StartReader.App.View
 
         private void rtbContent_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            var content = args.NewValue.ToString().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             var s = (RichTextBlock)sender;
             s.Blocks.Clear();
+            if (args.NewValue is null)
+                return;
+            var content = args.NewValue.ToString().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             foreach (var item in content)
             {
                 s.Blocks.Add(new Paragraph { Inlines = { new Run { Text = item } }, Margin = new Thickness(0, 0, 0, 12) });

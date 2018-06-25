@@ -20,6 +20,7 @@ namespace StartReader.App.Model
 
         [Required]
         public string PackageFamilyName { get; set; }
+
         [Required]
         public string ExtensionId { get; set; }
 

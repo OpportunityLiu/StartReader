@@ -36,16 +36,17 @@ namespace StartReader.App.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<int>("WordCount");
+
                     b.Property<string>("coverUri")
                         .HasColumnName("CoverUri");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Author");
-
                     b.HasIndex("CurrentSourceId");
 
-                    b.HasIndex("Title");
+                    b.HasIndex("Title", "Author")
+                        .IsUnique();
 
                     b.ToTable("Books");
                 });
@@ -80,13 +81,7 @@ namespace StartReader.App.Migrations
 
                     b.Property<int>("BookId");
 
-                    b.Property<string>("Content")
-                        .IsRequired();
-
-                    b.Property<string>("Key")
-                        .IsRequired();
-
-                    b.Property<string>("Preview");
+                    b.Property<string>("Content");
 
                     b.Property<int>("SourceId");
 
@@ -125,7 +120,7 @@ namespace StartReader.App.Migrations
             modelBuilder.Entity("StartReader.App.Model.Chapter", b =>
                 {
                     b.HasOne("StartReader.App.Model.Book", "Book")
-                        .WithMany("Chapters")
+                        .WithMany("ChaptersData")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
 

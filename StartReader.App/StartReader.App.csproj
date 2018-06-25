@@ -108,9 +108,9 @@
     <Compile Include="Extensiton\DataSource.Connection.cs" />
     <Compile Include="Extensiton\DataSourceManager.cs" />
     <Compile Include="Extensiton\ExtensionPropertiesVisitor.cs" />
-    <Compile Include="Migrations\20180625083858_Alpha1.cs" />
-    <Compile Include="Migrations\20180625083858_Alpha1.designer.cs">
-      <DependentUpon>20180625083858_Alpha1.cs</DependentUpon>
+    <Compile Include="Migrations\20180625093443_Alpha1.cs" />
+    <Compile Include="Migrations\20180625093443_Alpha1.designer.cs">
+      <DependentUpon>20180625093443_Alpha1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BookShelfModelSnapshot.cs" />
     <Compile Include="Model\Book.cs" />

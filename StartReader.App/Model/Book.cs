@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StartReader.App.Model
 {
-    class Book : BookDataOutline
+    class Book : BookDataDetailed
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,8 +18,10 @@ namespace StartReader.App.Model
         [Required]
         public BookSource CurrentSource { get; set; }
 
-        public List<BookSource> Sources { get; set; } = new List<BookSource>();
+        [Required]
+        public List<BookSource> Sources { get; private set; }
 
-        public List<Chapter> Chapters { get; set; } = new List<Chapter>();
+        [Required]
+        public List<Chapter> ChaptersData { get; private set; }
     }
 }

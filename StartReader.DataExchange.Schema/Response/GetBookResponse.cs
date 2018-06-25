@@ -11,7 +11,7 @@ namespace StartReader.DataExchange.Response
 {
     public sealed class GetBookResponse : ResponseMessageBase,IResponseMessage<GetBookRequest, GetBookResponse>
     {
-        [JsonRequired]
+        [JsonProperty(Required = Required.Always)]
         public BookDataDetailed BookData { get; set; }
     }
 }

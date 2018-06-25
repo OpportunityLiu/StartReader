@@ -10,7 +10,6 @@ namespace StartReader.DataExchange.Response
 {
     public sealed class SearchResponse : ResponseMessageBase,IResponseMessage<SearchRequest, SearchResponse>
     {
-        [JsonRequired]
         public IList<BookDataBrief> Books { get; } = new List<BookDataBrief>();
     }
 }

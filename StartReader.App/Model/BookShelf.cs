@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using StartReader.DataExchange.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,11 +36,10 @@ namespace StartReader.App.Model
             modelBuilder.Entity<BookSource>().HasOne(s => s.Book).WithMany(b => b.Sources).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Book>().HasOne(b => b.CurrentSource);
-            modelBuilder.Entity<Book>().HasIndex(b => b.Title);
-            modelBuilder.Entity<Book>().HasIndex(b => b.Author);
-            modelBuilder.Entity<Book>().HasMany(b => b.Chapters).WithOne(c => c.Book).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Book>().Property<string>("coverUri").HasColumnName(nameof(Book.CoverUri));
-            modelBuilder.Entity<Book>().Ignore(b => b.CoverUri);
+            modelBuilder.Entity<Book>().HasIndex(b => new { b.Title, b.Author }).IsUnique();
+
+            modelBuilder.Entity<Book>().HasMany(b => b.ChaptersData).WithOne(c => c.Book).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

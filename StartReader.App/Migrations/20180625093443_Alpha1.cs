@@ -37,6 +37,7 @@ namespace StartReader.App.Migrations
                     Description = table.Column<string>(nullable: true),
                     IsFinished = table.Column<bool>(nullable: false),
                     Title = table.Column<string>(nullable: false),
+                    WordCount = table.Column<int>(nullable: false),
                     CoverUri = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -57,9 +58,7 @@ namespace StartReader.App.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     BookId = table.Column<int>(nullable: false),
-                    Content = table.Column<string>(nullable: false),
-                    Key = table.Column<string>(nullable: false),
-                    Preview = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
                     SourceId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
@@ -83,19 +82,15 @@ namespace StartReader.App.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Author",
-                table: "Books",
-                column: "Author");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_CurrentSourceId",
                 table: "Books",
                 column: "CurrentSourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Title",
+                name: "IX_Books_Title_Author",
                 table: "Books",
-                column: "Title");
+                columns: new[] { "Title", "Author" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookSource_BookId",
