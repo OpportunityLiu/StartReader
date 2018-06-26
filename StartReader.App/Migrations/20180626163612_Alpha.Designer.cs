@@ -8,7 +8,7 @@ using StartReader.App.Model;
 namespace StartReader.App.Migrations
 {
     [DbContext(typeof(BookShelf))]
-    [Migration("20180626124843_Alpha")]
+    [Migration("20180626163612_Alpha")]
     partial class Alpha
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

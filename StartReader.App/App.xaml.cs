@@ -106,10 +106,10 @@ namespace StartReader.App
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //foreach (var item in DataSourceManager.Instance.ProviderSources)
-            //{
-            //    item.CloseAll();
-            //}
+            foreach (var item in DataSourceManager.Instance.Sources)
+            {
+                item.Close();
+            }
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }

@@ -39,6 +39,16 @@ namespace StartReader.App.View
 
         new ReadVM ViewModel { get => (ReadVM)base.ViewModel; set => base.ViewModel = value; }
 
+        protected override void OnViewModelChanged(ViewModelBase oldValue, ViewModelBase newValue)
+        {
+            if (!(newValue is ReadVM nv))
+                return;
+            var zero = this.spPrevious.ActualHeight;
+            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
+            var offset = nv.Position * one + zero;
+            this.svContent.ChangeView(null, offset, null, true);
+        }
+
         private void rtbContent_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             var s = (RichTextBlock)sender;
@@ -50,6 +60,20 @@ namespace StartReader.App.View
             {
                 s.Blocks.Add(new Paragraph { Inlines = { new Run { Text = item } }, Margin = new Thickness(0, 0, 0, 12) });
             }
+        }
+
+        private void svContent_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            if (e.IsIntermediate)
+                return;
+            var zero = this.spPrevious.ActualHeight;
+            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
+            var position = (this.svContent.VerticalOffset - zero) / 1;
+            ViewModel.Position = position;
+            if (position < 0)
+                ViewModel.GoToChapter.Execute(ViewModel.Previous);
+            else if (position > 1)
+                ViewModel.GoToChapter.Execute(ViewModel.Next);
         }
     }
 }

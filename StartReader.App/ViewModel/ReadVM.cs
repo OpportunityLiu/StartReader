@@ -111,7 +111,10 @@ namespace StartReader.App.ViewModel
 
         public Command<Chapter> GoToChapter => Commands.GetOrAdd(() => Command<Chapter>.Create(async (s, ch) =>
         {
-            await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), ch.BookId + " " + ch.Index);
+            if (ch == this.previous)
+                await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), ch.BookId + " " + ch.Index + " 1");
+            else
+                await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), ch.BookId + " " + ch.Index);
         }, (s, ch) => ch != null));
     }
 }

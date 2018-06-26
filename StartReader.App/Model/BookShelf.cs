@@ -52,10 +52,6 @@ namespace StartReader.App.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications)
-                .UsePropertyAccessMode(PropertyAccessMode.FieldDuringConstruction);
-
             modelBuilder.Entity<BookSource>()
                 .HasOne(s => s.Book)
                 .WithMany(b => b.Sources)

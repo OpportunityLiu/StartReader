@@ -20,7 +20,6 @@ namespace StartReader.DataExchange.Model
         public int WordCount { get; set; } = -1;
 
         [JsonProperty(Required = Required.Always)]
-        [NotMapped]
         public string Key { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]

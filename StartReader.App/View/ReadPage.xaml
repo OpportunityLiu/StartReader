@@ -5,11 +5,14 @@
                 xmlns:local="using:StartReader.App.View"
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Grid>
-    <ScrollViewer x:Name="svContent">
+    <ScrollViewer x:Name="svContent"
+                  ViewChanged="svContent_ViewChanged"
+                  ext:FrameworkElementExtensions.EnableActualSizeBinding="True">
       <StackPanel>
         <StackPanel x:Name="spPrevious"
                     Padding="0,20">
@@ -23,7 +26,7 @@
                      HorizontalAlignment="Center" />
         </StackPanel>
         <RichTextBlock x:Name="rtbContent"
-                       MinHeight="{x:Bind svContent.ActualHeight, Mode=OneWay}"
+                       MinHeight="{x:Bind svContent.(ext:FrameworkElementExtensions.ActualHeight), Mode=OneWay}"
                        DataContext="{x:Bind ViewModel.Chapter.Content, Mode=OneWay}"
                        DataContextChanged="rtbContent_DataContextChanged" />
         <StackPanel x:Name="spNext"
