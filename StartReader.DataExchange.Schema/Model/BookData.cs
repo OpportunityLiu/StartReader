@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StartReader.DataExchange.Model
 {
-    public class BookDataBrief
+    public class BookDataBrief:ModelBase
     {
         [JsonProperty(Required = Required.Always)]
         [NotMapped]

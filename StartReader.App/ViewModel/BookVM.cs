@@ -29,7 +29,8 @@ namespace StartReader.App.ViewModel
             {
                 using (var bs = BookShelf.Create())
                 {
-                    this.Book = bs.Books.Include(b => b.Sources).Include(b => b.ChaptersData).First(b => b.Id == bookId);
+                    this.Book = bs.Books.Include(b => b.Sources).First(b => b.Id == bookId);
+                    bs.Entry(this.book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
                     var source = this.book.Sources.First(s => s.IsCurrent);
                     var data = await source.FindSource().ExecuteAsync(new GetBookRequest { BookKey = source.BookKey });
                     JsonConvert.PopulateObject(JsonConvert.SerializeObject(data.BookData), this.book);
@@ -40,6 +41,7 @@ namespace StartReader.App.ViewModel
                         newChpData.Add(new Chapter
                         {
                             Index = i,
+                            Key = item.Key,
                             Book = this.book,
                             Preview = item.Preview,
                             Source = source,
@@ -51,7 +53,12 @@ namespace StartReader.App.ViewModel
                     }
                     this.book.ChaptersData.Update(newChpData, (o, n) => o.Index.CompareTo(n.Index), (existChp, newChp) =>
                     {
-                        bs.Entry(existChp).CurrentValues.SetValues(newChp);
+                        existChp.Content = newChp.Content;
+                        existChp.Key = newChp.Key;
+                        existChp.Source = newChp.Source;
+                        existChp.Title = newChp.Title;
+                        existChp.UpdateTime = newChp.UpdateTime;
+                        existChp.WordCount = newChp.WordCount;
                     });
                     bs.SaveChanges();
                 }

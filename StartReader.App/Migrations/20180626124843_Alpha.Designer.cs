@@ -8,7 +8,7 @@ using StartReader.App.Model;
 namespace StartReader.App.Migrations
 {
     [DbContext(typeof(BookShelf))]
-    [Migration("20180625150649_Alpha")]
+    [Migration("20180626124843_Alpha")]
     partial class Alpha
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,18 +72,20 @@ namespace StartReader.App.Migrations
 
                     b.HasIndex("BookKey");
 
-                    b.HasIndex("ExtensionId", "PackageFamilyName");
+                    b.HasIndex("PackageFamilyName", "ExtensionId");
 
                     b.ToTable("BookSources");
                 });
 
             modelBuilder.Entity("StartReader.App.Model.Chapter", b =>
                 {
-                    b.Property<int>("Index");
-
                     b.Property<int>("BookId");
 
+                    b.Property<int>("Index");
+
                     b.Property<string>("Content");
+
+                    b.Property<string>("Key");
 
                     b.Property<int>("SourceId");
 
@@ -94,9 +96,7 @@ namespace StartReader.App.Migrations
 
                     b.Property<int>("WordCount");
 
-                    b.HasKey("Index", "BookId");
-
-                    b.HasIndex("BookId");
+                    b.HasKey("BookId", "Index");
 
                     b.HasIndex("SourceId");
 

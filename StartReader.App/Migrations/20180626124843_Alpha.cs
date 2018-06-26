@@ -55,9 +55,10 @@ namespace StartReader.App.Migrations
                 name: "Chapters",
                 columns: table => new
                 {
-                    Index = table.Column<int>(nullable: false),
                     BookId = table.Column<int>(nullable: false),
+                    Index = table.Column<int>(nullable: false),
                     Content = table.Column<string>(nullable: true),
+                    Key = table.Column<string>(nullable: true),
                     SourceId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
@@ -65,7 +66,7 @@ namespace StartReader.App.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chapters", x => new { x.Index, x.BookId });
+                    table.PrimaryKey("PK_Chapters", x => new { x.BookId, x.Index });
                     table.ForeignKey(
                         name: "FK_Chapters_Books_BookId",
                         column: x => x.BookId,
@@ -97,14 +98,9 @@ namespace StartReader.App.Migrations
                 column: "BookKey");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookSources_ExtensionId_PackageFamilyName",
+                name: "IX_BookSources_PackageFamilyName_ExtensionId",
                 table: "BookSources",
-                columns: new[] { "ExtensionId", "PackageFamilyName" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Chapters_BookId",
-                table: "Chapters",
-                column: "BookId");
+                columns: new[] { "PackageFamilyName", "ExtensionId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Chapters_SourceId",

@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-         xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" 
-         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" 
-         xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
-         IgnorableNamespaces="uap mp uap3">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
   <Identity Name="2289Opportunity.81331195979C" Publisher="CN=22AA5D8B-590F-4C7F-807B-5166B66DDBE0" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="28dc07ff-b5d8-4f9a-b2be-7c28a3acaa6b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -41,7 +37,6 @@
             <uap:DisplayName>开卷阅读默认数据源</uap:DisplayName>
           </uap:Protocol>
         </uap:Extension>
-        
         <uap3:Extension Category="windows.appExtensionHost">
           <uap3:AppExtensionHost>
             <uap3:Name>StartReader.DataProviderSource</uap3:Name>

@@ -11,10 +11,11 @@ namespace StartReader.App.Model
 {
     class BookSource
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [ForeignKey("Book")]
+        public int BookId { get; set; }
         [Required]
         public Book Book { get; set; }
 

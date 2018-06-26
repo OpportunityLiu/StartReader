@@ -1,6 +1,8 @@
 ﻿using StartReader.DataExchange.Request;
 using StartReader.DataExchange.Response;
 using System;
+using System.Diagnostics;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 
@@ -39,12 +41,9 @@ namespace StartReader.DataExchange
                 }
                 await args.Request.SendResponseAsync(response);
             }
-            catch (NotImplementedException)
-            {
-                await args.Request.SendResponseAsync(ErrorResponse.NotImplemented);
-            }
             catch (Exception ex)
             {
+                Debugger.Break();
                 await args.Request.SendResponseAsync(new ErrorResponse(ex.HResult, ex.Message));
             }
             finally

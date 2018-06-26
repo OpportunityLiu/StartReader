@@ -102,15 +102,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataExchange\ModelBase.cs" />
     <Compile Include="DataExchange\RequestMessageBase.cs" />
     <Compile Include="DataExchange\ResponseMessageBase.cs" />
     <Compile Include="Extensiton\DataSource.cs" />
     <Compile Include="Extensiton\DataSource.Connection.cs" />
     <Compile Include="Extensiton\DataSourceManager.cs" />
     <Compile Include="Extensiton\ExtensionPropertiesVisitor.cs" />
-    <Compile Include="Migrations\20180625150649_Alpha.cs" />
-    <Compile Include="Migrations\20180625150649_Alpha.designer.cs">
-      <DependentUpon>20180625150649_Alpha.cs</DependentUpon>
+    <Compile Include="Migrations\20180626124843_Alpha.cs" />
+    <Compile Include="Migrations\20180626124843_Alpha.designer.cs">
+      <DependentUpon>20180626124843_Alpha.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\BookShelfModelSnapshot.cs" />
     <Compile Include="Model\Book.cs" />

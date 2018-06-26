@@ -105,9 +105,11 @@ namespace StartReader.App.Extensiton
             {
                 var msg = response.Message;
                 var code = Convert.ToInt32(msg["Code"]);
-                msg.TryGetValue("Message", out var error);
                 if (code != 0)
-                    throw new InvalidOperationException($"{error}（错误代码：{code}）");
+                {
+                    msg.TryGetValue("Message", out var error);
+                    throw new DataSourceException($"{error}（错误代码：{code}）");
+                }
                 var data = Convert.ToString(msg["Data"]);
                 var r = JsonConvert.DeserializeObject<TResponse>(data);
                 r.Source = this;
@@ -117,10 +119,21 @@ namespace StartReader.App.Extensiton
             {
                 throw;
             }
+            catch (DataSourceException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"App Service 返回数据有误。", ex);
             }
         }
+    }
+
+    public class DataSourceException : Exception
+    {
+        public DataSourceException() { }
+        public DataSourceException(string message) : base(message) { }
+        public DataSourceException(string message, Exception inner) : base(message, inner) { }
     }
 }

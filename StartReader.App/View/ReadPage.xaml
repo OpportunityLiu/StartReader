@@ -9,10 +9,35 @@
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Grid>
-    <ScrollViewer>
-      <RichTextBlock x:Name="rtbContent"
-                     DataContext="{x:Bind ViewModel.Chapter.Content, Mode=OneWay}"
-                     DataContextChanged="rtbContent_DataContextChanged" />
+    <ScrollViewer x:Name="svContent">
+      <StackPanel>
+        <StackPanel x:Name="spPrevious"
+                    Padding="0,20">
+          <TextBlock Visibility="{x:Bind ViewModel.Previous, Mode=OneWay, Converter={StaticResource NullToCollpsedConverter}}"
+                     Text="上一章节"
+                     HorizontalAlignment="Center" />
+          <TextBlock Visibility="{x:Bind ViewModel.Previous, Mode=OneWay, Converter={StaticResource NullToVisibleConverter}}"
+                     Text="已经到达第一章"
+                     HorizontalAlignment="Center" />
+          <TextBlock Text="{x:Bind ViewModel.Previous.Title, FallbackValue=''}"
+                     HorizontalAlignment="Center" />
+        </StackPanel>
+        <RichTextBlock x:Name="rtbContent"
+                       MinHeight="{x:Bind svContent.ActualHeight, Mode=OneWay}"
+                       DataContext="{x:Bind ViewModel.Chapter.Content, Mode=OneWay}"
+                       DataContextChanged="rtbContent_DataContextChanged" />
+        <StackPanel x:Name="spNext"
+                    Padding="0,20">
+          <TextBlock Visibility="{x:Bind ViewModel.Next, Mode=OneWay, Converter={StaticResource NullToCollpsedConverter}}"
+                     Text="下一章节"
+                     HorizontalAlignment="Center" />
+          <TextBlock Visibility="{x:Bind ViewModel.Next, Mode=OneWay, Converter={StaticResource NullToVisibleConverter}}"
+                     Text="已经到达最后一章"
+                     HorizontalAlignment="Center" />
+          <TextBlock Text="{x:Bind ViewModel.Next.Title, FallbackValue=''}"
+                     HorizontalAlignment="Center" />
+        </StackPanel>
+      </StackPanel>
     </ScrollViewer>
   </Grid>
 </views:MvvmPage>

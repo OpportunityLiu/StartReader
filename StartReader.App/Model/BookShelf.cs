@@ -15,8 +15,17 @@ namespace StartReader.App.Model
         public static BookShelf Create()
         {
             var r = new BookShelf();
-            r.Database.EnsureCreated();
+            r.Database.Migrate();
             return r;
+        }
+
+        public static async Task InitAsync()
+        {
+            using (var r = new BookShelf())
+            {
+                await r.Database.MigrateAsync();
+                var book = await r.Books.Include(b => b.Sources).Include(b => b.ChaptersData).FirstOrDefaultAsync();
+            }
         }
 
         public BookShelf() { }
@@ -43,15 +52,42 @@ namespace StartReader.App.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BookSource>().HasOne(s => s.Book).WithMany(b => b.Sources).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<BookSource>().HasIndex(s => s.BookKey);
-            modelBuilder.Entity<BookSource>().HasIndex(s => new { s.ExtensionId, s.PackageFamilyName });
+            modelBuilder
+                .HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications)
+                .UsePropertyAccessMode(PropertyAccessMode.FieldDuringConstruction);
 
-            modelBuilder.Entity<Book>().Property<string>("coverUri").HasColumnName(nameof(Book.CoverUri));
-            modelBuilder.Entity<Book>().HasIndex(b => new { b.Title, b.Author }).IsUnique();
+            modelBuilder.Entity<BookSource>()
+                .HasOne(s => s.Book)
+                .WithMany(b => b.Sources)
+                .HasForeignKey(s => s.BookId)
+                .HasPrincipalKey(b => b.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<BookSource>()
+                .HasIndex(s => s.BookKey);
+            modelBuilder.Entity<BookSource>()
+                .HasIndex(s => new { s.PackageFamilyName, s.ExtensionId });
 
-            modelBuilder.Entity<Chapter>().HasOne(c => c.Book).WithMany(b => b.ChaptersData).HasForeignKey("BookId").OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Chapter>().HasKey(nameof(Chapter.Index), "BookId");
+            modelBuilder.Entity<Book>()
+                .Property<string>("coverUri")
+                .HasColumnName(nameof(Book.CoverUri));
+            modelBuilder.Entity<Book>()
+                .HasIndex(b => new { b.Title, b.Author })
+                .IsUnique();
+
+            modelBuilder.Entity<Chapter>()
+                .HasOne(c => c.Book)
+                .WithMany(b => b.ChaptersData)
+                .HasForeignKey(c => c.BookId)
+                .HasPrincipalKey(b => b.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Chapter>()
+                .HasOne(c => c.Source)
+                .WithMany()
+                .HasForeignKey(c => c.SourceId)
+                .HasPrincipalKey(s => s.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Chapter>()
+                .HasKey(c => new { c.BookId, c.Index });
         }
     }
 }

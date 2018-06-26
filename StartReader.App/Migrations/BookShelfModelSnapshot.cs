@@ -71,18 +71,20 @@ namespace StartReader.App.Migrations
 
                     b.HasIndex("BookKey");
 
-                    b.HasIndex("ExtensionId", "PackageFamilyName");
+                    b.HasIndex("PackageFamilyName", "ExtensionId");
 
                     b.ToTable("BookSources");
                 });
 
             modelBuilder.Entity("StartReader.App.Model.Chapter", b =>
                 {
-                    b.Property<int>("Index");
-
                     b.Property<int>("BookId");
 
+                    b.Property<int>("Index");
+
                     b.Property<string>("Content");
+
+                    b.Property<string>("Key");
 
                     b.Property<int>("SourceId");
 
@@ -93,9 +95,7 @@ namespace StartReader.App.Migrations
 
                     b.Property<int>("WordCount");
 
-                    b.HasKey("Index", "BookId");
-
-                    b.HasIndex("BookId");
+                    b.HasKey("BookId", "Index");
 
                     b.HasIndex("SourceId");
 

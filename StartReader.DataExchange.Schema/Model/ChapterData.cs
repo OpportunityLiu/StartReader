@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StartReader.DataExchange.Model
 {
-    public class ChapterDataBrief
+    public class ChapterDataBrief : ModelBase
     {
         [JsonProperty(Required = Required.Always)]
         [Required]

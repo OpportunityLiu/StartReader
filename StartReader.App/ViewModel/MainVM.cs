@@ -52,12 +52,12 @@ namespace StartReader.App.ViewModel
         {
             using (var bs = BookShelf.Create())
             {
-                var existBook = bs.Books.Include(b => b.Sources).FirstOrDefault(b => b.Title == book.Title && b.Author == book.Author);
+                var existBook = await bs.Books.Include(b => b.Sources).FirstOrDefaultAsync(b => b.Title == book.Title && b.Author == book.Author);
                 var dc = SearchResult[book];
                 var newBook = JsonConvert.DeserializeObject<Book>(JsonConvert.SerializeObject(book));
                 var newSource = new BookSource
                 {
-                    Book = existBook,
+                    BookId = existBook?.Id ?? 0,
                     IsCurrent = true,
                     BookKey = book.Key,
                     ExtensionId = dc.ExtensionId,
@@ -85,7 +85,7 @@ namespace StartReader.App.ViewModel
                         bs.Entry(existSource).CurrentValues.SetValues(newSource);
                     }
                 }
-                bs.SaveChanges();
+                await bs.SaveChangesAsync();
                 await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), (existBook ?? newBook).Id.ToString());
             }
         }
