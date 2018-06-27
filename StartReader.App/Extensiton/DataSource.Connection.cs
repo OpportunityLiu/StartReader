@@ -15,7 +15,7 @@ namespace StartReader.App.Extensiton
         private AppServiceConnection connection;
         public bool IsOpened => this.connection != null;
 
-        public async Task OpenAsync()
+        public async Task OpenAsync(CancellationToken token = default)
         {
             if (!IsAvailable)
                 throw new InvalidOperationException("该扩展无法使用。");
@@ -27,7 +27,7 @@ namespace StartReader.App.Extensiton
                 AppServiceName = AppServiceName,
                 PackageFamilyName = PackageFamilyName,
             };
-            var status = await connection.OpenAsync();
+            var status = await connection.OpenAsync().AsTask(token);
             var info = default(string);
             switch (status)
             {
@@ -69,12 +69,12 @@ namespace StartReader.App.Extensiton
             connection.Dispose();
         }
 
-        public async Task<TResponse> ExecuteAsync<TRequest, TResponse>(IRequestMessage<TRequest, TResponse> message)
+        public async Task<TResponse> ExecuteAsync<TRequest, TResponse>(IRequestMessage<TRequest, TResponse> message, CancellationToken token = default)
             where TRequest : RequestMessageBase, IRequestMessage<TRequest, TResponse>
             where TResponse : ResponseMessageBase, IResponseMessage<TRequest, TResponse>
         {
             if (!IsOpened)
-                await OpenAsync();
+                await OpenAsync(token);
             else
                 LastUse = DateTime.UtcNow;
 
@@ -85,7 +85,7 @@ namespace StartReader.App.Extensiton
             {
                 ["Method"] = message.Method,
                 ["Data"] = JsonConvert.SerializeObject(message),
-            });
+            }).AsTask(token);
             var info = default(string);
             switch (response.Status)
             {
@@ -114,10 +114,6 @@ namespace StartReader.App.Extensiton
                 var r = JsonConvert.DeserializeObject<TResponse>(data);
                 r.Source = this;
                 return r;
-            }
-            catch (InvalidOperationException)
-            {
-                throw;
             }
             catch (DataSourceException)
             {

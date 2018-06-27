@@ -25,5 +25,7 @@
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
+    <Button Command="{x:Bind ViewModel.FetchAll, Mode=OneWay}"
+            Content="{x:Bind ViewModel.FetchAll.Progress, Mode=OneWay}"></Button>
   </Grid>
 </views:MvvmPage>

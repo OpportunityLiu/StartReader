@@ -116,7 +116,7 @@ namespace StartReader.ExtensionProvider
                 var doc = await GetDoc(new Uri($"read/{request.BookKey}/{ck}.html", UriKind.Relative));
                 var cc = new ChapterDataDetailed();
                 var nk = await parseChapterPageAsync(cc, doc);
-                if (i + 1 < keyList.Length)
+                if (i + 1 < keyList.Length && keyList[i + 1].Substring(1) == ck)
                     keyList[i + 1] = nk;
                 r.Chapters.Add(cc);
             }
