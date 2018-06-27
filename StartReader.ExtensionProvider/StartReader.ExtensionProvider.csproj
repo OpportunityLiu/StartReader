@@ -130,9 +130,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ChakraCore.NET">
-      <Version>1.3.1</Version>
-    </PackageReference>
     <PackageReference Include="HtmlAgilityPack">
       <Version>1.8.4</Version>
     </PackageReference>
@@ -151,6 +148,12 @@
       <Project>{2c33af92-6268-47ef-acd2-321f4657c11f}</Project>
       <Name>StartReader.DataExchange</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ChakraBridge, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JsBridge\ChakraBridge.winmd</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

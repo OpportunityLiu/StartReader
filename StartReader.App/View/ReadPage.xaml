@@ -31,7 +31,7 @@
                      HorizontalAlignment="Center" />
         </StackPanel>
         <RichTextBlock x:Name="rtbContent"
-                       FontSize="28"
+                       FontSize="26"
                        MinHeight="{x:Bind svContent.(ext:FrameworkElementExtensions.ActualHeight), Mode=OneWay}"
                        VerticalAlignment="Center"
                        DataContext="{x:Bind ViewModel.Current.Content, Mode=OneWay}"

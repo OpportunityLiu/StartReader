@@ -20,6 +20,27 @@ namespace StartReader.ExtensionProvider
         public MiaoBiGeProvider(AppServiceConnection connection)
             : base(connection, new Uri("https://www.miaobige.com/"))
         {
+            this.chakraHost = new ChakraBridge.ChakraHost();
+        }
+
+        private ChakraBridge.ChakraHost chakraHost;
+
+        private ChakraBridge.ChakraHost GetScriptHost()
+        {
+            if (this.chakraHost == null)
+            {
+                this.chakraHost = new ChakraBridge.ChakraHost();
+                this.chakraHost.RunScript(@"
+var $ = 
+{
+    post: function(uri,data,cb)
+    {
+        this.uri = uri;
+        this.data = JSON.stringify(data);
+    }
+};");
+            }
+            return this.chakraHost;
         }
 
         private static readonly Regex idReg = new Regex(@"^.+/(\d+)/?.+?$");
@@ -153,20 +174,10 @@ namespace StartReader.ExtensionProvider
             if (script != null)
             {
                 var scr = script.GetInnerText();
-                var uri = "";
-                var data = default(IDictionary<string, string>);
-                using (var rt = ChakraCore.NET.ChakraRuntime.Create())
-                using (var ct = rt.CreateContext(false))
-                {
-                    ct.GlobalObject.Binding.SetMethod<string, string>("postInj", post);
-                    ct.RunScript("var $ = {post: function(uri,data,cb){postInj(uri,JSON.stringify(data))}};");
-                    ct.RunScript(scr);
-                }
-                void post(string u, string d)
-                {
-                    uri = u.CoalesceNullOrEmpty("/ajax/content/");
-                    data = JsonConvert.DeserializeObject<IDictionary<string, string>>(d);
-                }
+                var rt = GetScriptHost();
+                rt.RunScript(scr);
+                var uri = rt.RunScript("$.uri").CoalesceNullOrEmpty("/ajax/content/");
+                var data = JsonConvert.DeserializeObject<IDictionary<string, string>>(rt.RunScript("$.data"));
                 var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
                 var contentDoc = new HtmlDocument();
                 contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);

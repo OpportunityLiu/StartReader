@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.App", "StartReader.App\StartReader.App.csproj", "{E89C4C4C-D61F-480F-91FC-722A070127F2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DBB14F5-9E30-4F07-960D-771ED310BD9C} = {8DBB14F5-9E30-4F07-960D-771ED310BD9C}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartReader.ExtensionProvider", "StartReader.ExtensionProvider\StartReader.ExtensionProvider.csproj", "{49C69C24-CF79-4A50-8FD4-6721AD2AE8C6}"
 EndProject
