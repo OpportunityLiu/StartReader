@@ -22,6 +22,7 @@ namespace StartReader.DataExchange
                 {
                     ["Code"] = er.Code,
                     ["Message"] = er.Message,
+                    ["Data"] = JsonConvert.SerializeObject(er.Data),
                 };
             return new ValueSet
             {

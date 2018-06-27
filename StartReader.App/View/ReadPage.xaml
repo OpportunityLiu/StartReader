@@ -9,7 +9,7 @@
                 xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
                 SizeChanged="page_SizeChanged"
                 NavigationCacheMode="Enabled"
-                Title="{x:Bind getTitle(ViewModel.Current.Title, ViewModel.Book.Title), Mode=OneWay}"
+                Title="{x:Bind getTitle(ViewModel.Current.Title, ViewModel.Current.VolumeTitle, ViewModel.Current.Book.Title), Mode=OneWay}"
                 Padding="{x:Bind VisibleBounds, Mode=OneWay}"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -31,6 +31,7 @@
                      HorizontalAlignment="Center" />
         </StackPanel>
         <RichTextBlock x:Name="rtbContent"
+                       FontSize="28"
                        MinHeight="{x:Bind svContent.(ext:FrameworkElementExtensions.ActualHeight), Mode=OneWay}"
                        VerticalAlignment="Center"
                        DataContext="{x:Bind ViewModel.Current.Content, Mode=OneWay}"

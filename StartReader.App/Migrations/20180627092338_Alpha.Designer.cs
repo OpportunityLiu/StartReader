@@ -8,7 +8,7 @@ using StartReader.App.Model;
 namespace StartReader.App.Migrations
 {
     [DbContext(typeof(BookShelf))]
-    [Migration("20180626163612_Alpha")]
+    [Migration("20180627092338_Alpha")]
     partial class Alpha
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,7 +30,16 @@ namespace StartReader.App.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("ExtensionId")
+                        .IsRequired();
+
                     b.Property<bool>("IsFinished");
+
+                    b.Property<string>("Key")
+                        .IsRequired();
+
+                    b.Property<string>("PackageFamilyName")
+                        .IsRequired();
 
                     b.Property<string>("Title")
                         .IsRequired();
@@ -42,39 +51,11 @@ namespace StartReader.App.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Title", "Author")
-                        .IsUnique();
-
-                    b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("StartReader.App.Model.BookSource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("BookId");
-
-                    b.Property<string>("BookKey")
-                        .IsRequired();
-
-                    b.Property<string>("ExtensionId")
-                        .IsRequired();
-
-                    b.Property<bool>("IsCurrent");
-
-                    b.Property<string>("PackageFamilyName")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("BookKey");
-
                     b.HasIndex("PackageFamilyName", "ExtensionId");
 
-                    b.ToTable("BookSources");
+                    b.HasIndex("Title", "Author");
+
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("StartReader.App.Model.Chapter", b =>
@@ -85,30 +66,21 @@ namespace StartReader.App.Migrations
 
                     b.Property<string>("Content");
 
-                    b.Property<string>("Key");
-
-                    b.Property<int>("SourceId");
+                    b.Property<string>("Key")
+                        .IsRequired();
 
                     b.Property<string>("Title")
                         .IsRequired();
 
                     b.Property<DateTime?>("UpdateTime");
 
+                    b.Property<string>("VolumeTitle");
+
                     b.Property<int>("WordCount");
 
                     b.HasKey("BookId", "Index");
 
-                    b.HasIndex("SourceId");
-
                     b.ToTable("Chapters");
-                });
-
-            modelBuilder.Entity("StartReader.App.Model.BookSource", b =>
-                {
-                    b.HasOne("StartReader.App.Model.Book", "Book")
-                        .WithMany("Sources")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("StartReader.App.Model.Chapter", b =>
@@ -116,11 +88,6 @@ namespace StartReader.App.Migrations
                     b.HasOne("StartReader.App.Model.Book", "Book")
                         .WithMany("ChaptersData")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("StartReader.App.Model.BookSource", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

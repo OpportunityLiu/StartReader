@@ -24,7 +24,6 @@ namespace StartReader.App.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    [ViewOf(typeof(BookVM))]
     public sealed partial class BookPage : MvvmPage
     {
         public BookPage()

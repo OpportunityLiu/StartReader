@@ -25,16 +25,20 @@ namespace StartReader.App.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    [ViewOf(typeof(ReadVM))]
     public sealed partial class ReadPage : MvvmPage
     {
         public ReadPage()
         {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(ReadVM).TypeHandle);
             this.InitializeComponent();
         }
 
-        private string getTitle(string cName, string bName) => cName + " - " + bName;
+        private string getTitle(string cName, string vName, string bName)
+        {
+            if (vName.IsNullOrWhiteSpace())
+                return $"{cName} - {bName}";
+            else
+                return $"{cName} - {vName} - {bName}";
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

@@ -108,7 +108,8 @@ namespace StartReader.App.Extensiton
                 if (code != 0)
                 {
                     msg.TryGetValue("Message", out var error);
-                    throw new DataSourceException($"{error}（错误代码：{code}）");
+                    msg.TryGetValue("Data", out var errorData);
+                    throw new DataSourceException(this, $"{error}（错误代码：{code}）", errorData);
                 }
                 var data = Convert.ToString(msg["Data"]);
                 var r = JsonConvert.DeserializeObject<TResponse>(data);
@@ -121,15 +122,8 @@ namespace StartReader.App.Extensiton
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"App Service 返回数据有误。", ex);
+                throw new DataFormatException(this, ex.Message, ex);
             }
         }
-    }
-
-    public class DataSourceException : Exception
-    {
-        public DataSourceException() { }
-        public DataSourceException(string message) : base(message) { }
-        public DataSourceException(string message, Exception inner) : base(message, inner) { }
     }
 }

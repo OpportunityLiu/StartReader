@@ -30,63 +30,32 @@ namespace StartReader.App.ViewModel
         {
             using (var bs = BookShelf.Create())
             {
-                Book = bs.Books.Include(b => b.Sources).First(b => b.Id == bookId);
+                Book = bs.Books.Find(bookId);
                 bs.Entry(Book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
             }
-            if (Book.ChaptersData.IsNullOrEmpty())
-                Refersh.Execute(null);
+            if (Book.ChaptersData.IsEmpty())
+                Refersh.Execute();
         }
 
         private Book book;
-        public Book Book { get => this.book; set => Set(ref this.book, value); }
+        public Book Book
+        {
+            get => this.book;
+            set
+            {
+                Set(ref this.book, value);
+                FetchAll.OnCanExecuteChanged();
+            }
+        }
 
-        public AsyncCommand<int?> Refersh => Commands.GetOrAdd(() => AsyncCommand<int?>.Create(async (sender, sourceId) =>
+        public AsyncCommand Refersh => Commands.GetOrAdd(() => AsyncCommand.Create(async sender =>
         {
             using (var bs = BookShelf.Create())
             {
                 var book = bs.Books.Find(this.book.Id);
                 bs.Entry(book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
-                bs.Entry(book).Collection(b => b.Sources).Load();
-
-                var oldCurrentSource = book.Sources.First(s => s.IsCurrent);
-                sourceId = sourceId ?? oldCurrentSource.Id;
-                var newCurrentSource = book.Sources.First(s => s.Id == sourceId);
-                if (oldCurrentSource != newCurrentSource)
-                {
-                    oldCurrentSource.IsCurrent = false;
-                    newCurrentSource.IsCurrent = true;
-                    book.ChaptersData.Clear();
-                    await bs.SaveChangesAsync();
-                }
-
-                var data = await newCurrentSource.FindSource().ExecuteAsync(new GetBookRequest { BookKey = newCurrentSource.BookKey });
-                JsonConvert.PopulateObject(JsonConvert.SerializeObject(data.BookData), book);
-                var newChpData = new List<Chapter>();
-                var i = 0;
-                foreach (var item in book.Chapters)
-                {
-                    newChpData.Add(new Chapter
-                    {
-                        Index = i,
-                        Key = item.Key,
-                        Book = this.book,
-                        Preview = item.Preview,
-                        Source = newCurrentSource,
-                        UpdateTime = item.UpdateTime,
-                        Title = item.Title,
-                        WordCount = item.WordCount,
-                    });
-                    i++;
-                }
-                book.ChaptersData.Update(newChpData, (o, n) => o.Index.CompareTo(n.Index), (existChp, newChp) =>
-                {
-                    existChp.Key = newChp.Key;
-                    existChp.Source = newChp.Source;
-                    existChp.Title = newChp.Title;
-                    existChp.UpdateTime = newChp.UpdateTime ?? existChp.UpdateTime;
-                    if (newChp.WordCount >= 0)
-                        existChp.WordCount = newChp.WordCount;
-                });
+                var data = await book.FindSource().ExecuteAsync(new GetBookRequest { BookKey = book.Key, NeedDetail = true });
+                book.Update(data.BookData, data.Source);
                 await bs.SaveChangesAsync();
                 this.Book = book;
             }
@@ -99,29 +68,27 @@ namespace StartReader.App.ViewModel
             {
                 var book = bs.Books.Find(this.book.Id);
                 bs.Entry(book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
-                bs.Entry(book).Collection(b => b.Sources).Load();
-
-                var source = bs.BookSources.Single(s => s.BookId == this.book.Id && s.IsCurrent);
-                var chpsToLoad = book.ChaptersData.Where(ch => ch.Content.IsNullOrEmpty() && ch.SourceId == source.Id).ToList();
-                progress.Report(book.ChaptersData.Count - chpsToLoad.Count);
                 try
                 {
-                    for (var offset = 0; offset < chpsToLoad.Count; offset += 10)
+                    var chpsToLoad = book.ChaptersData.Where(ch => ch.Content.IsNullOrEmpty()).ToList();
+                    if (chpsToLoad.IsEmpty())
+                        return;
+
+                    progress.Report(book.ChaptersData.Count - chpsToLoad.Count);
+                    await Task.Delay(0).ConfigureAwait(false);
+
+                    const int PAGE_SIZE = 5;
+
+                    for (var offset = 0; offset < chpsToLoad.Count; offset += PAGE_SIZE)
                     {
-                        var data = await source.FindSource().ExecuteAsync(new GetChaptersRequest
+                        var data = await book.FindSource().ExecuteAsync(new GetChaptersRequest
                         {
-                            BookKey = source.BookKey,
-                            ChapterKeys = chpsToLoad.Skip(offset).Take(10).Select(ch => ch.Key).ToList(),
+                            BookKey = book.Key,
+                            ChapterKeys = chpsToLoad.Skip(offset).Take(PAGE_SIZE).Select(ch => ch.Key).ToList(),
                         }, token);
                         for (var i = 0; i < data.Chapters.Count; i++)
                         {
-                            var existCh = chpsToLoad[i + offset];
-                            var newCh = data.Chapters[i];
-                            existCh.Key = newCh.Key;
-                            existCh.Content = newCh.Content;
-                            existCh.WordCount = newCh.WordCount;
-                            existCh.Title = newCh.Title;
-                            existCh.UpdateTime = newCh.UpdateTime;
+                            chpsToLoad[i + offset].Update(data.Chapters[i]);
                         }
                         await bs.SaveChangesAsync();
                         progress.Report(book.ChaptersData.Count - chpsToLoad.Count + offset);
@@ -132,14 +99,14 @@ namespace StartReader.App.ViewModel
                     this.Book = book;
                 }
             }
-        })));
+        }), sender => !this.book.ChaptersData.IsEmpty()));
 
         public async void Open(Chapter chapter)
         {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(ReadVM).TypeHandle);
-            ViewModelFactory.Get<ReadVM>(this.book.Id.ToString()).GoToChapter.Execute(chapter.Index);
+            var vm = ViewModelFactory.Get<ReadVM>(this.book.Id.ToString());
+            vm.GoToChapter.Execute(-1);
+            vm.GoToChapter.Execute(chapter.Index);
             await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), chapter.Book.Id);
         }
-
     }
 }

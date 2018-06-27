@@ -44,7 +44,7 @@ namespace StartReader.DataExchange
             catch (Exception ex)
             {
                 Debugger.Break();
-                await args.Request.SendResponseAsync(new ErrorResponse(ex.HResult, ex.Message));
+                await args.Request.SendResponseAsync(new ErrorResponse(ex.HResult, ex.Message, ex));
             }
             finally
             {

@@ -13,5 +13,8 @@ namespace StartReader.DataExchange.Request
 
         [JsonRequired]
         public string BookKey { get; internal set; }
+
+        [JsonRequired]
+        public bool NeedDetail { get; internal set; } 
     }
 }

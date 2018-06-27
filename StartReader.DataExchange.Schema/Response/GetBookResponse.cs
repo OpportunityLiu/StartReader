@@ -9,9 +9,16 @@ using System.Threading.Tasks;
 
 namespace StartReader.DataExchange.Response
 {
-    public sealed class GetBookResponse : ResponseMessageBase,IResponseMessage<GetBookRequest, GetBookResponse>
+    public sealed class GetBookResponse : ResponseMessageBase, IResponseMessage<GetBookRequest, GetBookResponse>
     {
         [JsonProperty(Required = Required.Always)]
-        public BookDataDetailed BookData { get; set; }
+        public
+#if APP
+            BookDataDetailed
+#else
+            BookDataBrief
+#endif
+            BookData
+        { get; set; }
     }
 }

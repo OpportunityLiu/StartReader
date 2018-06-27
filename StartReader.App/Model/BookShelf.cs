@@ -24,7 +24,7 @@ namespace StartReader.App.Model
             using (var r = new BookShelf())
             {
                 await r.Database.MigrateAsync();
-                var book = await r.Books.Include(b => b.Sources).Include(b => b.ChaptersData).FirstOrDefaultAsync();
+                var book = await r.Books.Include(b => b.ChaptersData).FirstOrDefaultAsync();
             }
         }
 
@@ -32,7 +32,6 @@ namespace StartReader.App.Model
 
         public DbSet<Book> Books { get; private set; }
         public DbSet<Chapter> Chapters { get; private set; }
-        public DbSet<BookSource> BookSources { get; private set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,38 +51,23 @@ namespace StartReader.App.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BookSource>()
-                .HasOne(s => s.Book)
-                .WithMany(b => b.Sources)
-                .HasForeignKey(s => s.BookId)
-                .HasPrincipalKey(b => b.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<BookSource>()
-                .HasIndex(s => s.BookKey);
-            modelBuilder.Entity<BookSource>()
-                .HasIndex(s => new { s.PackageFamilyName, s.ExtensionId });
-
             modelBuilder.Entity<Book>()
                 .Property<string>("coverUri")
                 .HasColumnName(nameof(Book.CoverUri));
             modelBuilder.Entity<Book>()
-                .HasIndex(b => new { b.Title, b.Author })
-                .IsUnique();
+                .HasIndex(b => new { b.Title, b.Author });
+            modelBuilder.Entity<Book>()
+                .HasIndex(s => new { s.PackageFamilyName, s.ExtensionId });
 
+            modelBuilder.Entity<Chapter>()
+                .HasKey(c => new { c.BookId, c.Index });
             modelBuilder.Entity<Chapter>()
                 .HasOne(c => c.Book)
                 .WithMany(b => b.ChaptersData)
                 .HasForeignKey(c => c.BookId)
                 .HasPrincipalKey(b => b.Id)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Chapter>()
-                .HasOne(c => c.Source)
-                .WithMany()
-                .HasForeignKey(c => c.SourceId)
-                .HasPrincipalKey(s => s.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Chapter>()
-                .HasKey(c => new { c.BookId, c.Index });
         }
     }
 }

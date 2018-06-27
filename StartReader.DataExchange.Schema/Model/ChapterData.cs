@@ -13,6 +13,9 @@ namespace StartReader.DataExchange.Model
         public string Title { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public string VolumeTitle { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public DateTime? UpdateTime { get; set; }
 
         [DefaultValue(-1)]
@@ -20,6 +23,7 @@ namespace StartReader.DataExchange.Model
         public int WordCount { get; set; } = -1;
 
         [JsonProperty(Required = Required.Always)]
+        [Required]
         public string Key { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]

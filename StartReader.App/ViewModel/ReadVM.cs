@@ -26,10 +26,7 @@ namespace StartReader.App.ViewModel
 
         private ReadVM(int bookId)
         {
-            using (var bs = BookShelf.Create())
-            {
-                this.Book = bs.Books.Find(bookId);
-            }
+            this.BookId = bookId;
         }
 
         private double position;
@@ -46,7 +43,7 @@ namespace StartReader.App.ViewModel
             }
         }
 
-        public Book Book { get; }
+        public int BookId { get; }
 
         private Chapter current;
         public Chapter Current { get => this.current; set => Set(ref this.current, value); }
@@ -64,58 +61,60 @@ namespace StartReader.App.ViewModel
                 return;
             using (var bs = BookShelf.Create())
             {
-                var bookId = this.Book.Id;
                 var chapterIndex = current.Index;
-                var chps = bs.Chapters.Include(c => c.Book).Include(c => c.Source)
-                    .Where(c => c.BookId == bookId && c.Index >= chapterIndex - 1 && c.Index <= chapterIndex + 3)
+                var chps = await bs.Chapters.Include(c => c.Book)
+                    .Where(c => c.BookId == BookId && c.Index >= chapterIndex - 1 && c.Index <= chapterIndex + 3)
                     .OrderBy(c => c.Index)
-                    .ToList();
-                current = bs.Chapters.Find(bookId, chapterIndex);
+                    .ToListAsync();
+                current = bs.Chapters.Find(BookId, chapterIndex);
 
-                var qchpsToLoad = chps.Where(c => c.SourceId == current.SourceId);
-                if (!force)
-                    qchpsToLoad = qchpsToLoad.Where(c => c.Content.IsNullOrEmpty());
-                var chpsToLoad = qchpsToLoad.ToList();
+                var chpsToLoad = force ? chps : chps.Where(c => c.Content.IsNullOrEmpty()).ToList();
 
                 if (chpsToLoad.IsNullOrEmpty())
                     return;
 
-                var detail = (await this.Current.Source.FindSource().ExecuteAsync(new GetChaptersRequest
+                var detail = (await current.Book.FindSource().ExecuteAsync(new GetChaptersRequest
                 {
-                    BookKey = current.Source.BookKey,
+                    BookKey = current.Book.Key,
                     ChapterKeys = chpsToLoad.Select(c => c.Key).ToList(),
                 }));
                 for (var i = 0; i < detail.Chapters.Count; i++)
                 {
-                    bs.Entry(chpsToLoad[i]).CurrentValues.SetValues(detail.Chapters[i]);
+                    chpsToLoad[i].Update(detail.Chapters[i]);
                 }
-                bs.SaveChanges();
+                await bs.SaveChangesAsync();
 
                 this.Current = current;
-                this.Previous = bs.Chapters.Find(bookId, chapterIndex - 1);
-                this.Next = bs.Chapters.Find(bookId, chapterIndex + 1);
+                this.Previous = bs.Chapters.Find(BookId, chapterIndex - 1);
+                this.Next = bs.Chapters.Find(BookId, chapterIndex + 1);
             }
         }));
 
         public Command<int> GoToChapter => Commands.GetOrAdd(() => Command<int>.Create((s, chapterIndex) =>
         {
+            if (chapterIndex < 0)
+            {
+                this.Current = null;
+                this.Previous = null;
+                this.Next = null;
+                return;
+            }
             using (var bs = BookShelf.Create())
             {
-                var bookId = this.Book.Id;
-                bs.Chapters.Include(c => c.Book).Include(c => c.Source)
-                    .Where(c => c.BookId == bookId && c.Index >= chapterIndex - 1 && c.Index <= chapterIndex + 1).Load();
+                bs.Chapters.Include(c => c.Book)
+                    .Where(c => c.BookId == BookId && c.Index >= chapterIndex - 1 && c.Index <= chapterIndex + 1).Load();
                 if (chapterIndex == this.previous?.Index)
                     this.Position = 1;
                 else
                     this.Position = 0;
-                this.Current = bs.Chapters.Find(bookId, chapterIndex);
-                this.Previous = bs.Chapters.Find(bookId, chapterIndex - 1);
-                this.Next = bs.Chapters.Find(bookId, chapterIndex + 1);
+                this.Current = bs.Chapters.Find(BookId, chapterIndex);
+                this.Previous = bs.Chapters.Find(BookId, chapterIndex - 1);
+                this.Next = bs.Chapters.Find(BookId, chapterIndex + 1);
             }
             if (this.current.Content.IsNullOrEmpty() ||
                 (this.next != null && this.next.Content.IsNullOrEmpty()) ||
                 (this.previous != null && this.previous.Content.IsNullOrEmpty()))
                 this.Refresh.Execute(false);
-        }, (s, chapterIndex) => chapterIndex >= 0));
+        }));
     }
 }

@@ -7,22 +7,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StartReader.DataExchange.Model
 {
-    public class BookDataBrief:ModelBase
+    public class BookDataBrief : ModelBase
     {
         [JsonProperty(Required = Required.Always)]
-        [NotMapped]
+        [Required]
         public string Key { get; set; }
 
         [JsonProperty(Required = Required.Always)]
         [Required]
         public string Title { get; set; }
 
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public string AlternativeTitle { get; set; }
-
         [JsonProperty(Required = Required.Always)]
         [Required]
         public string Author { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public string AlternativeTitle { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string Description { get; set; }

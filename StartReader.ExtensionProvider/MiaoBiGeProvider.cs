@@ -85,17 +85,20 @@ namespace StartReader.ExtensionProvider
         {
             var r = new GetBookResponse
             {
-                BookData = new BookDataDetailed()
+                BookData = request.NeedDetail ? new BookDataDetailed() : new BookDataBrief()
             };
             var bookPage = await GetDoc(new Uri($"/book/{request.BookKey}", UriKind.Relative));
             parseBookMeta(r.BookData, bookPage);
             parseBookPage(r.BookData, bookPage);
-            var chapsPage1 = await GetDoc(new Uri($"/read/{request.BookKey}", UriKind.Relative));
-            var pc = parseReadPage(r.BookData, chapsPage1);
-            for (var i = 1; i < pc; i++)
+            if (r.BookData is BookDataDetailed detailed)
             {
-                var chapsPage = await GetDoc(new Uri($"/read/{request.BookKey}/{i + 1}", UriKind.Relative));
-                parseReadPage(r.BookData, chapsPage);
+                var chapsPage1 = await GetDoc(new Uri($"/read/{request.BookKey}", UriKind.Relative));
+                var pc = parseReadPage(detailed, chapsPage1);
+                for (var i = 1; i < pc; i++)
+                {
+                    var chapsPage = await GetDoc(new Uri($"/read/{request.BookKey}/{i + 1}", UriKind.Relative));
+                    parseReadPage(detailed, chapsPage);
+                }
             }
             return r;
         }
@@ -140,6 +143,10 @@ namespace StartReader.ExtensionProvider
             var center = document.GetElementbyId("center");
             chapter.UpdateTime = DateTime.Parse(center.SelectSingleNode("./div[@class='title']/span[last()]").GetInnerText());
             chapter.WordCount = int.Parse(center.SelectSingleNode("./div[@class='title']/span[last()-1]").GetInnerText());
+
+            var displayTitle = center.SelectSingleNode("./div[@class='title']/h1").GetInnerText();
+            if (displayTitle != chapter.Title && displayTitle.EndsWith(chapter.Title))
+                chapter.VolumeTitle = displayTitle.Substring(0, displayTitle.Length - chapter.Title.Length).Trim();
 
             var script = center.SelectSingleNode("./script");
             var content = document.GetElementbyId("content");

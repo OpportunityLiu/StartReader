@@ -52,41 +52,23 @@ namespace StartReader.App.ViewModel
         {
             using (var bs = BookShelf.Create())
             {
-                var existBook = await bs.Books.Include(b => b.Sources).FirstOrDefaultAsync(b => b.Title == book.Title && b.Author == book.Author);
                 var dc = SearchResult[book];
-                var newBook = JsonConvert.DeserializeObject<Book>(JsonConvert.SerializeObject(book));
-                var newSource = new BookSource
-                {
-                    BookId = existBook?.Id ?? 0,
-                    IsCurrent = true,
-                    BookKey = book.Key,
-                    ExtensionId = dc.ExtensionId,
-                    PackageFamilyName = dc.PackageFamilyName,
-                };
+                var existBook = await bs.Books.FirstOrDefaultAsync(b
+                    => b.Title == book.Title
+                    && b.Author == book.Author
+                    && b.PackageFamilyName == dc.PackageFamilyName
+                    && b.ExtensionId == dc.ExtensionId);
                 if (existBook is null)
                 {
-                    newBook.Sources.Add(newSource);
-                    bs.Books.Add(newBook);
+                    existBook = new Book(book, dc);
+                    bs.Books.Add(existBook);
                 }
                 else
                 {
-                    newBook.Id = existBook.Id;
-                    bs.Entry(existBook).CurrentValues.SetValues(newBook);
-                    var existSource = existBook.Sources.FirstOrDefault(s
-                        => s.ExtensionId == newSource.ExtensionId
-                        && s.PackageFamilyName == newSource.PackageFamilyName);
-                    if (existSource is null)
-                        existBook.Sources.Add(newSource);
-                    else
-                    {
-                        var oldCurrentSource = existBook.Sources.First(s => s.IsCurrent);
-                        oldCurrentSource.IsCurrent = false;
-                        newSource.Id = existSource.Id;
-                        bs.Entry(existSource).CurrentValues.SetValues(newSource);
-                    }
+                    existBook.Update(book, dc);
                 }
                 await bs.SaveChangesAsync();
-                await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), (existBook ?? newBook).Id.ToString());
+                await Navigator.GetForCurrentView().NavigateAsync(typeof(BookPage), existBook.Id.ToString());
             }
         }
 
