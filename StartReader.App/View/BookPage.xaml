@@ -7,6 +7,10 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:model="using:StartReader.DataExchange.Model"
                 xmlns:model1="using:StartReader.App.Model"
+                xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+                NavigationCacheMode="Enabled"
+                Title="{x:Bind ViewModel.Book.Title, Mode=OneWay}"
+                Padding="{x:Bind VisibleBounds, Mode=OneWay}"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 

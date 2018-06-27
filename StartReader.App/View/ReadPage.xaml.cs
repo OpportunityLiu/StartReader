@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -39,17 +40,18 @@ namespace StartReader.App.View
 
         new ReadVM ViewModel { get => (ReadVM)base.ViewModel; set => base.ViewModel = value; }
 
+        private bool contentLoaded = false;
+
         protected override void OnViewModelChanged(ViewModelBase oldValue, ViewModelBase newValue)
         {
-            if (!(newValue is ReadVM nv))
-                return;
-            var zero = this.spPrevious.ActualHeight;
-            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
-            var offset = nv.Position * one + zero;
-            this.svContent.ChangeView(null, offset, null, true);
+            this.contentLoaded = false;
+            if (newValue is ReadVM nv)
+            {
+                this.Title = nv.Chapter.Title + " - " + nv.Chapter.Book.Title;
+            }
         }
 
-        private void rtbContent_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void rtbContent_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             var s = (RichTextBlock)sender;
             s.Blocks.Clear();
@@ -60,20 +62,36 @@ namespace StartReader.App.View
             {
                 s.Blocks.Add(new Paragraph { Inlines = { new Run { Text = item } }, Margin = new Thickness(0, 0, 0, 12) });
             }
-        }
-
-        private void svContent_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            if (e.IsIntermediate)
-                return;
+            await Dispatcher.YieldIdle();
             var zero = this.spPrevious.ActualHeight;
             var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
-            var position = (this.svContent.VerticalOffset - zero) / 1;
+            var offset = ViewModel.Position * one + zero;
+            this.svContent.ChangeView(null, offset, null, true);
+            this.contentLoaded = true;
+        }
+
+        private async void svContent_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            if (e.IsIntermediate || !this.contentLoaded)
+                return;
+            await Dispatcher.YieldIdle();
+            var zero = this.spPrevious.ActualHeight;
+            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
+            var position = (this.svContent.VerticalOffset - zero) / one;
             ViewModel.Position = position;
             if (position < 0)
                 ViewModel.GoToChapter.Execute(ViewModel.Previous);
             else if (position > 1)
                 ViewModel.GoToChapter.Execute(ViewModel.Next);
+        }
+
+        private async void page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            await Dispatcher.YieldIdle();
+            var zero = this.spPrevious.ActualHeight;
+            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
+            var offset = ViewModel.Position * one + zero;
+            this.svContent.ChangeView(null, offset, null, true);
         }
     }
 }

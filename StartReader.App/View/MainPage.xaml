@@ -8,6 +8,9 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:model="using:StartReader.DataExchange.Model"
                 xmlns:extensiton="using:StartReader.App.Extensiton"
+                xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+                NavigationCacheMode="Enabled"
+                Padding="{x:Bind VisibleBounds, Mode=OneWay}"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
