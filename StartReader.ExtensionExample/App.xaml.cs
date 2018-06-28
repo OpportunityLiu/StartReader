@@ -99,7 +99,7 @@ namespace StartReader.ExtensionExample
             deferral.Complete();
         }
 
-        private DataExchangeProvider provider;
+        private DataProvider provider;
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
@@ -108,16 +108,10 @@ namespace StartReader.ExtensionExample
 
             var trigger = (AppServiceTriggerDetails)args.TaskInstance.TriggerDetails;
 
-            switch (trigger.Name)
-            {
-            case "StartReader.ExampleSource1":
-                provider = new ExampleProvider1(trigger.AppServiceConnection); break;
-            case "StartReader.ExampleSource2":
-                provider = new ExampleProvider2(trigger.AppServiceConnection); break;
-            default:
-                break;
-            }
-
+            this.provider = trigger.AttachProvider()
+                .Add<ExampleProvider1>("StartReader.ExampleSource1")
+                .Add<ExampleProvider2>("StartReader.ExampleSource2")
+                .Provider;
         }
     }
 }

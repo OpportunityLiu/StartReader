@@ -6,9 +6,9 @@ using System.Collections.ObjectModel;
 
 namespace StartReader.DataExchange
 {
-    public static class DataExchangeMap
+    public static class MappingInfo
     {
-        static DataExchangeMap()
+        static MappingInfo()
         {
             MethodToRequestMap = new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>
             {

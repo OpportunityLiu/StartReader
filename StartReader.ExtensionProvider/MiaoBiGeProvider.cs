@@ -17,10 +17,9 @@ namespace StartReader.ExtensionProvider
 
     internal class MiaoBiGeProvider : DataExchangeProviderEx
     {
-        public MiaoBiGeProvider(AppServiceConnection connection)
-            : base(connection, new Uri("https://www.miaobige.com/"))
+        public MiaoBiGeProvider()
+            : base(new Uri("https://www.miaobige.com/"))
         {
-            this.chakraHost = new ChakraBridge.ChakraHost();
         }
 
         private ChakraBridge.ChakraHost chakraHost;
@@ -39,6 +38,7 @@ var $ =
         this.data = JSON.stringify(data);
     }
 };");
+                this.chakraHost.DettachConetxt();
             }
             return this.chakraHost;
         }
@@ -175,9 +175,11 @@ var $ =
             {
                 var scr = script.GetInnerText();
                 var rt = GetScriptHost();
+                rt.AttachConetxt();
                 rt.RunScript(scr);
                 var uri = rt.RunScript("$.uri").CoalesceNullOrEmpty("/ajax/content/");
                 var data = JsonConvert.DeserializeObject<IDictionary<string, string>>(rt.RunScript("$.data"));
+                rt.DettachConetxt();
                 var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
                 var contentDoc = new HtmlDocument();
                 contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);

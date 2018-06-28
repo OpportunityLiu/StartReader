@@ -123,8 +123,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DataExchangeExtension.cs" />
-    <Compile Include="DataExchangeMap.cs" />
-    <Compile Include="DataExchangeProvider.cs" />
+    <Compile Include="MappingInfo.cs" />
+    <Compile Include="DataProvider.cs" />
     <Compile Include="ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestMessageBase.cs" />

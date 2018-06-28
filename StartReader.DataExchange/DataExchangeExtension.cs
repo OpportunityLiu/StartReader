@@ -35,7 +35,7 @@ namespace StartReader.DataExchange
         {
             var rqmsg = request.Message;
             var method = rqmsg["Method"].ToString();
-            var rsType = DataExchangeMap.RequestToResponseMap[DataExchangeMap.MethodToRequestMap[method]];
+            var rsType = MappingInfo.RequestToResponseMap[MappingInfo.MethodToRequestMap[method]];
             if (!(message is ErrorResponse || message.GetType() == rsType))
                 throw new ArgumentException($"类型错误，应为 {rsType} 或 {typeof(ErrorResponse)}。", nameof(message));
             return request.SendResponseAsync(message.ToValueSet());
@@ -48,7 +48,7 @@ namespace StartReader.DataExchange
             var message = request.Message;
             var method = message["Method"].ToString();
             var data = message["Data"].ToString();
-            var requestType = DataExchangeMap.MethodToRequestMap[method];
+            var requestType = MappingInfo.MethodToRequestMap[method];
             return (IRequestMessage)JsonConvert.DeserializeObject(data, requestType);
         }
 

@@ -11,7 +11,7 @@ using Windows.Web.Http;
 
 namespace StartReader.ExtensionProvider
 {
-    internal abstract class DataExchangeProviderEx : DataExchangeProvider, IDisposable
+    internal abstract class DataExchangeProviderEx : DataProvider, IDisposable
     {
         static DataExchangeProviderEx()
         {
@@ -25,7 +25,7 @@ namespace StartReader.ExtensionProvider
 
         protected Uri BaseUri { get; }
 
-        public DataExchangeProviderEx(AppServiceConnection connection, Uri baseUri) : base(connection)
+        protected DataExchangeProviderEx(Uri baseUri)
         {
             this.BaseUri = baseUri;
         }

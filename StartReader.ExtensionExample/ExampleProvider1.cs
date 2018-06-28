@@ -10,9 +10,9 @@ using Windows.ApplicationModel.AppService;
 
 namespace StartReader.ExtensionExample
 {
-    public sealed class ExampleProvider1 : DataExchangeProvider
+    public sealed class ExampleProvider1 : DataProvider
     {
-        public ExampleProvider1(AppServiceConnection connection) : base(connection)
+        public ExampleProvider1() : base()
         {
         }
 

@@ -7,9 +7,9 @@ using Windows.ApplicationModel.AppService;
 
 namespace StartReader.ExtensionExample
 {
-    public sealed class ExampleProvider2 : DataExchangeProvider
+    public sealed class ExampleProvider2 : DataProvider
     {
-        public ExampleProvider2(AppServiceConnection connection) : base(connection)
+        public ExampleProvider2() : base()
         {
         }
 
