@@ -22,7 +22,7 @@
       </uap:VisualElements>
       <Extensions>
         <uap3:Extension Category="windows.appExtension">
-          <uap3:AppExtension Name="StartReader.DataProviderSource" Id="DefaultSource" DisplayName="内置内容提供程序" Description="本应用内置的内容提供程序，提供了一些数据源。" PublicFolder="Public">
+          <uap3:AppExtension Name="StartReader.DataProviderSource" Id="miaobige" DisplayName="妙笔阁（内置）" Description="北方有佳人，倾国又倾城" PublicFolder="Public">
             <uap3:Properties>
               <Url>https://www.miaobige.com/</Url>
               <AppService>miaobige</AppService>
@@ -31,6 +31,17 @@
         </uap3:Extension>
         <uap:Extension Category="windows.appService" EntryPoint="StartReader.ExtensionProvider.DefaultProvider">
           <uap:AppService Name="miaobige" />
+        </uap:Extension>
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension Name="StartReader.DataProviderSource" Id="2kxs" DisplayName="2k小说" Description="— 小说·阅读·评论 —" PublicFolder="Public">
+            <uap3:Properties>
+              <Url>https://www.2kxs.com/</Url>
+              <AppService>2kxs</AppService>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+        <uap:Extension Category="windows.appService" EntryPoint="StartReader.ExtensionProvider.DefaultProvider">
+          <uap:AppService Name="2kxs" />
         </uap:Extension>
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="startreader.dataprovidersource">

@@ -20,7 +20,8 @@ namespace StartReader.ExtensionProvider
             taskInstance.Canceled += this.TaskInstance_Canceled;
             var de = (AppServiceTriggerDetails)taskInstance.TriggerDetails;
             this.provider = de.AttachProvider()
-                .Add<MiaoBiGeProvider>("miaobige")
+                .Add<MiaoBiGe>("miaobige")
+                .Add<TwoKXiaoShuo>("2kxs")
                 .Provider;
         }
 

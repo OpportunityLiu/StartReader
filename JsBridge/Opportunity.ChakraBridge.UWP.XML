@@ -1,0 +1,2002 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Opportunity.ChakraBridge.UWP</name>
+    </assembly>
+    <members>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsContext">
+            <summary>
+                A script context.
+            </summary>
+            <remarks>
+                <para>
+                Each script context contains its own global object, distinct from the global object in 
+                other script contexts.
+                </para>
+                <para>
+                Many Chakra hosting APIs require an "active" script context, which can be set using 
+                Current. Chakra hosting APIs that require a current context to be set will note 
+                that explicitly in their documentation.
+                </para>
+            </remarks>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.ParseScript(System.String,Opportunity.ChakraBridge.UWP.JsSourceContext,System.String)">
+            <summary>
+                Parses a script and returns a <c>Function</c> representing the script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="script">The script to parse.</param>
+            <param name="sourceContext">
+                A cookie identifying the script that can be used by script contexts that have debugging enabled.
+            </param>
+            <param name="sourceName">The location the script came from.</param>
+            <returns>A <c>Function</c> representing the script code.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.ParseScript(System.String)">
+            <summary>
+                Parses a script and returns a <c>Function</c> representing the script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="script">The script to parse.</param>
+            <returns>A <c>Function</c> representing the script code.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.ParseScript(System.String,System.Byte[],Opportunity.ChakraBridge.UWP.JsSourceContext,System.String)">
+            <summary>
+                Parses a serialized script and returns a <c>Function</c> representing the script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="script">The script to parse.</param>
+            <param name="buffer">The serialized script.</param>
+            <param name="sourceContext">
+                A cookie identifying the script that can be used by script contexts that have debugging enabled.
+            </param>
+            <param name="sourceName">The location the script came from.</param>
+            <returns>A <c>Function</c> representing the script code.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.ParseScript(System.Byte[])">
+            <summary>
+                Parses a serialized script and returns a <c>Function</c> representing the script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="buffer">The serialized script.</param>
+            <returns>A <c>Function</c> representing the script code.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.RunScript(System.String,Opportunity.ChakraBridge.UWP.JsSourceContext,System.String)">
+            <summary>
+                Executes a script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="script">The script to run.</param>
+            <param name="sourceContext">
+                A cookie identifying the script that can be used by script contexts that have debugging enabled.
+            </param>
+            <param name="sourceName">The location the script came from.</param>
+            <returns>The result of the script, if any.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.RunScript(System.String)">
+            <summary>
+                Executes a script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="script">The script to run.</param>
+            <returns>The result of the script, if any.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.RunScript(System.String,System.Byte[],Opportunity.ChakraBridge.UWP.JsSourceContext,System.String)">
+            <summary>
+                Runs a serialized script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="script">The source code of the serialized script.</param>
+            <param name="buffer">The serialized script.</param>
+            <param name="sourceContext">
+                A cookie identifying the script that can be used by script contexts that have debugging enabled.
+            </param>
+            <param name="sourceName">The location the script came from.</param>
+            <returns>The result of the script, if any.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.RunScript(System.Byte[])">
+            <summary>
+                Runs a serialized script.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="buffer">The serialized script.</param>
+            <returns>The result of the script, if any.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.SerializeScript(System.String)">
+            <summary>
+                Serializes a parsed script to a buffer than can be reused.
+            </summary>
+            <remarks>
+                <para>
+                SerializeScript parses a script and then stores the parsed form of the script in a 
+                runtime-independent format. The serialized script then can be deserialized in any
+                runtime without requiring the script to be re-parsed.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <param name="script">The script to serialize.</param>
+            <returns>
+                The size of the buffer, in bytes, required to hold the serialized script.
+            </returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsContext.Scope">
+            <summary>
+                A scope automatically sets a context to current and resets the original context
+                when disposed.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsContext.Scope.previousContext">
+            <summary>
+                The previous context.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsContext.Scope.disposed">
+            <summary>
+                Whether the structure has been disposed.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.Scope.#ctor(Opportunity.ChakraBridge.UWP.JsContext)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsContext.Scope"/> struct. 
+            </summary>
+            <param name="context">The context to create the scope for.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.Scope.Dispose">
+            <summary>
+                Disposes the scope and sets the previous context to current.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsContext.GlobalObject">
+            <summary>
+                Gets the global object in the current script context.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsContext.Invalid">
+            <summary>
+                Gets an invalid context.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsContext.reference">
+            <summary>
+                The reference.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.#ctor(System.IntPtr)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsContext"/> struct. 
+            </summary>
+            <param name="reference">The reference.</param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsContext.Current">
+            <summary>
+                Gets or sets the current script context on the thread.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsContext.HasException">
+            <summary>
+                Gets a value indicating whether the runtime of the current context is in an exception state.
+            </summary>
+            <remarks>
+                <para>
+                If a call into the runtime results in an exception (either as the result of running a 
+                script or due to something like a conversion failure), the runtime is placed into an 
+                "exception state." All calls into any context created by the runtime (except for the 
+                exception APIs) will fail with <c>InExceptionState</c> until the exception is 
+                cleared.
+                </para>
+                <para>
+                If the runtime of the current context is in the exception state when a callback returns 
+                into the engine, the engine will automatically rethrow the exception.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsContext.Runtime">
+            <summary>
+                Gets the runtime that the context belongs to.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsContext.IsValid">
+            <summary>
+                Gets a value indicating whether the context is a valid context or not.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.Idle">
+            <summary>
+                Tells the runtime to do any idle processing it need to do.
+            </summary>
+            <remarks>
+                <para>
+                If idle processing has been enabled for the current runtime, calling <c>Idle</c> will 
+                inform the current runtime that the host is idle and that the runtime can perform 
+                memory cleanup tasks.
+                </para>
+                <para>
+                <c>Idle</c> will also return the number of system ticks until there will be more idle work
+                for the runtime to do. Calling <c>Idle</c> before this number of ticks has passed will do
+                no work.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <returns>
+                The next system tick when there will be more idle work to do. Returns the 
+                maximum number of ticks if there no upcoming idle work to do.
+            </returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.GetAndClearException">
+            <summary>
+                Returns the exception that caused the runtime of the current context to be in the 
+                exception state and resets the exception state for that runtime.
+            </summary>
+            <remarks>
+                <para>
+                If the runtime of the current context is not in an exception state, this API will throw
+                <c>JsErrorInvalidArgument</c>. If the runtime is disabled, this will return an exception
+                indicating that the script was terminated, but it will not clear the exception (the 
+                exception will be cleared if the runtime is re-enabled using 
+                <c>EnableRuntimeExecution</c>).
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <returns>The exception for the runtime of the current context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.SetException(Opportunity.ChakraBridge.UWP.JsError)">
+            <summary>
+                Sets the runtime of the current context to an exception state.
+            </summary>
+            <remarks>
+                <para>
+                If the runtime of the current context is already in an exception state, this API will 
+                throw <c>JsErrorInExceptionState</c>.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <param name="exception">
+                The JavaScript exception to set for the runtime of the current context.
+            </param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.AddRef">
+            <summary>
+                Adds a reference to a script context.
+            </summary>
+            <remarks>
+                Calling AddRef ensures that the context will not be freed until Release is called.
+            </remarks>
+            <returns>The object's new reference count.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.Release">
+            <summary>
+                Releases a reference to a script context.
+            </summary>
+            <remarks>
+                Removes a reference to a context that was created by AddRef.
+            </remarks>
+            <returns>The object's new reference count.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsContext.StartDebugging">
+            <summary>
+                Starts debugging in the current context. 
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsExceptionExtension.ThrowIfError(Opportunity.ChakraBridge.UWP.JsErrorCode)">
+            <summary>
+            Throws if a native method returns an error code.
+            </summary>
+            <param name="error">The error.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsEngineException">
+            <summary>
+                An exception that occurred in the workings of the JavaScript engine itself.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsEngineException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsEngineException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsEngineException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsEngineException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsEngineException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsEngineException"/> class.
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+            <param name="innerException">The exception caused this exception.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsErrorCode">
+            <summary>
+                An error code returned from a Chakra hosting API.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.NoError">
+            <summary>
+                Success error code.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CategoryUsage">
+            <summary>
+                Category of errors that relates to incorrect usage of the API itself.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.InvalidArgument">
+            <summary>
+                An argument to a hosting API was invalid.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.NullArgument">
+            <summary>
+                An argument to a hosting API was null in a context where null is not allowed.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.NoCurrentContext">
+            <summary>
+                The hosting API requires that a context be current, but there is no current context.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.InExceptionState">
+            <summary>
+                The engine is in an exception state and no APIs can be called until the exception is
+                cleared.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.NotImplemented">
+            <summary>
+                A hosting API is not yet implemented.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.WrongThread">
+            <summary>
+                A hosting API was called on the wrong thread.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.RuntimeInUse">
+            <summary>
+                A runtime that is still in use cannot be disposed.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.BadSerializedScript">
+            <summary>
+                A bad serialized script was used, or the serialized script was serialized by a
+                different version of the Chakra engine.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.InDisabledState">
+            <summary>
+                The runtime is in a disabled state.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CannotDisableExecution">
+            <summary>
+                Runtime does not support reliable script interruption.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.HeapEnumInProgress">
+            <summary>
+                A heap enumeration is currently underway in the script context.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.ArgumentNotObject">
+            <summary>
+                A hosting API that operates on object values was called with a non-object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.InProfileCallback">
+            <summary>
+                A script context is in the middle of a profile callback.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.InThreadServiceCallback">
+            <summary>
+                A thread service callback is currently underway.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CannotSerializeDebugScript">
+            <summary>
+                Scripts cannot be serialized in debug contexts.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.AlreadyDebuggingContext">
+            <summary>
+                The context cannot be put into a debug state because it is already in a debug state.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.AlreadyProfilingContext">
+            <summary>
+                The context cannot start profiling because it is already profiling.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.IdleNotEnabled">
+            <summary>
+                Idle notification given when the host did not enable idle processing.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CannotSetProjectionEnqueueCallback">
+            <summary>
+                The context did not accept the enqueue callback.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CannotStartProjection">
+            <summary>
+                Failed to start projection.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.InObjectBeforeCollectCallback">
+            <summary>
+                The operation is not supported in an object before collect callback.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.ObjectNotInspectable">
+            <summary>
+                Object cannot be unwrapped to IInspectable pointer.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.PropertyNotSymbol">
+            <summary>
+                A hosting API that operates on symbol property ids but was called with a non-symbol property id.
+                The error code is returned by JsGetSymbolFromPropertyId if the function is called with non-symbol property id.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.PropertyNotString">
+            <summary>
+                A hosting API that operates on string property ids but was called with a non-string property id.
+                The error code is returned by existing JsGetPropertyNamefromId if the function is called with non-string property id.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CategoryEngine">
+            <summary>
+                Category of errors that relates to errors occurring within the engine itself.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.OutOfMemory">
+            <summary>
+                The Chakra engine has run out of memory.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CategoryScript">
+            <summary>
+                Category of errors that relates to errors in a script.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.ScriptException">
+            <summary>
+                A JavaScript exception occurred while running a script.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.ScriptCompile">
+            <summary>
+                JavaScript failed to compile.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.ScriptTerminated">
+            <summary>
+                A script was terminated due to a request to suspend a runtime.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.ScriptEvalDisabled">
+            <summary>
+                A script was terminated because it tried to use <c>eval</c> or <c>function</c> and eval
+                was disabled.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.CategoryFatal">
+            <summary>
+                Category of errors that are fatal and signify failure of the engine.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.Fatal">
+            <summary>
+                A fatal error in the engine has occurred.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsErrorCode.WrongRuntime">
+            <summary>
+                A hosting API was called with object created on different javascript runtime.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsException">
+            <summary>
+                An exception returned from the Chakra engine.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+            <param name="innerException">The exception caused this exception.</param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsException.ErrorCode">
+            <summary>
+                The error code.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsFatalException">
+            <summary>
+                A fatal exception occurred.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsFatalException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsFatalException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsFatalException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsFatalException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsFatalException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsFatalException"/> class.
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+            <param name="innerException">The exception caused this exception.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsMemoryEventType">
+            <summary>
+                Allocation callback event type.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsMemoryEventType.Allocate">
+            <summary>
+                Indicates a request for memory allocation.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsMemoryEventType.Free">
+            <summary>
+                Indicates a memory freeing event.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsMemoryEventType.Failure">
+            <summary>
+                Indicates a failed allocation event.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsObjectBeforeCollectCallback">
+            <summary>
+                A callback called before collecting an object.
+            </summary>
+            <remarks>
+                Use <c>JsSetObjectBeforeCollectCallback</c> to register this callback.
+            </remarks>
+            <param name="reference">The object to be collected.</param>
+            <param name="callbackState">The state passed to <c>JsSetObjectBeforeCollectCallback</c>.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsProjectionCallbackContext">
+            <summary>
+                The context passed into application callback, JsProjectionEnqueueCallback, from Jsrt and
+                then passed back to Jsrt in the provided callback, JsProjectionCallback, by the application
+                on the correct thread.
+            </summary>
+            <remarks>
+                Requires calling JsSetProjectionEnqueueCallback to receive callbacks.
+            </remarks>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsProjectionCallbackContext.reference">
+            <summary>
+            The reference.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsProjectionCallback">
+            <summary>
+                The Jsrt callback which should be called with the context passed to JsProjectionEnqueueCallback on
+                the correct thread.
+            </summary>
+            <remarks>
+                Requires calling JsSetProjectionEnqueueCallback to receive callbacks.
+            </remarks>
+            <param name="jsContext">The context originally received by a call to JsProjectionEnqueueCallback.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsProjectionEnqueueCallback">
+            <summary>
+                The application callback which is called by Jsrt when a projection API is completed on
+                a different thread than the original.
+            </summary>
+            <remarks>
+                Requires calling JsSetProjectionEnqueueCallback to receive callbacks.
+            </remarks>
+            <param name="jsCallback">The callback to be invoked on the original thread.</param>
+            <param name="jsContext">The Jsrt context that must be passed into jsCallback.</param>
+            <param name="callbackState">The applications context.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsPromiseContinuationCallback">
+            <summary>
+                A promise continuation callback.
+            </summary>
+            <remarks>
+                The host can specify a promise continuation callback in <c>JsSetPromiseContinuationCallback</c>. If
+                a script creates a task to be run later, then the promise continuation callback will be called with
+                the task and the task should be put in a FIFO queue, to be run when the current script is
+                done executing.
+            </remarks>
+            <param name="task">The task, represented as a JavaScript function.</param>
+            <param name="callbackState">The data argument to be passed to the callback.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsSourceContext">
+            <summary>
+                A cookie that identifies a script for debugging purposes.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsSourceContext.context">
+            <summary>
+            The context.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.#ctor(System.IntPtr)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsSourceContext"/> struct.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsSourceContext.None">
+            <summary>
+                Gets an empty source context.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.op_Equality(Opportunity.ChakraBridge.UWP.JsSourceContext,Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                The equality operator for source contexts.
+            </summary>
+            <param name="left">The first source context to compare.</param>
+            <param name="right">The second source context to compare.</param>
+            <returns>Whether the two source contexts are the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.op_Inequality(Opportunity.ChakraBridge.UWP.JsSourceContext,Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                The inequality operator for source contexts.
+            </summary>
+            <param name="left">The first source context to compare.</param>
+            <param name="right">The second source context to compare.</param>
+            <returns>Whether the two source contexts are not the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.op_Subtraction(Opportunity.ChakraBridge.UWP.JsSourceContext,System.Int32)">
+            <summary>
+                Subtracts an offset from the value of the source context.
+            </summary>
+            <param name="context">The source context to subtract the offset from.</param>
+            <param name="offset">The offset to subtract.</param>
+            <returns>A new source context that reflects the subtraction of the offset from the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.Subtract(Opportunity.ChakraBridge.UWP.JsSourceContext,System.Int32)">
+            <summary>
+                Subtracts an offset from the value of the source context.
+            </summary>
+            <param name="left">The source context to subtract the offset from.</param>
+            <param name="right">The offset to subtract.</param>
+            <returns>A new source context that reflects the subtraction of the offset from the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.op_Decrement(Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                Decrements the value of the source context.
+            </summary>
+            <param name="context">The source context to decrement.</param>
+            <returns>A new source context that reflects the decrementing of the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.Decrement(Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                Decrements the value of the source context.
+            </summary>
+            <param name="left">The source context to decrement.</param>
+            <returns>A new source context that reflects the decrementing of the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.op_Addition(Opportunity.ChakraBridge.UWP.JsSourceContext,System.Int32)">
+            <summary>
+                Adds an offset from the value of the source context.
+            </summary>
+            <param name="context">The source context to add the offset to.</param>
+            <param name="offset">The offset to add.</param>
+            <returns>A new source context that reflects the addition of the offset to the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.Add(Opportunity.ChakraBridge.UWP.JsSourceContext,System.Int32)">
+            <summary>
+                Adds an offset from the value of the source context.
+            </summary>
+            <param name="left">The source context to add the offset to.</param>
+            <param name="right">The offset to add.</param>
+            <returns>A new source context that reflects the addition of the offset to the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.op_Increment(Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                Increments the value of the source context.
+            </summary>
+            <param name="context">The source context to increment.</param>
+            <returns>A new source context that reflects the incrementing of the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.Increment(Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                Increments the value of the source context.
+            </summary>
+            <param name="left">The source context to increment.</param>
+            <returns>A new source context that reflects the incrementing of the context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.FromIntPtr(System.IntPtr)">
+            <summary>
+                Creates a new source context. 
+            </summary>
+            <param name="cookie">
+                The cookie for the source context.
+            </param>
+            <returns>The new source context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.Equals(Opportunity.ChakraBridge.UWP.JsSourceContext)">
+            <summary>
+                Checks for equality between source contexts.
+            </summary>
+            <param name="other">The other source context to compare.</param>
+            <returns>Whether the two source contexts are the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.Equals(System.Object)">
+            <summary>
+                Checks for equality between source contexts.
+            </summary>
+            <param name="obj">The other source context to compare.</param>
+            <returns>Whether the two source contexts are the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsSourceContext.GetHashCode">
+            <summary>
+                The hash code.
+            </summary>
+            <returns>The hash code of the source context.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsArray.Create(System.UInt32)">
+            <summary>
+                Creates a JavaScript array object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="length">The initial length of the array.</param>
+            <returns>The new array object.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsBoolean">
+            <summary>
+                A JavaScript boolean value.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsBoolean.FromBoolean(System.Boolean)">
+            <summary>
+                Creates a <c>Boolean</c> value from a <c>bool</c> value.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="value">The value to be converted.</param>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsError.CreateError(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Creates a new JavaScript error object
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="message">Message for the error object.</param>
+            <returns>The new error object.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsError.CreateRangeError(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Creates a new JavaScript RangeError error object
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="message">Message for the error object.</param>
+            <returns>The new error object.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsError.CreateReferenceError(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Creates a new JavaScript ReferenceError error object
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="message">Message for the error object.</param>
+            <returns>The new error object.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsError.CreateSyntaxError(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Creates a new JavaScript SyntaxError error object
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="message">Message for the error object.</param>
+            <returns>The new error object.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsError.CreateTypeError(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Creates a new JavaScript TypeError error object
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="message">Message for the error object.</param>
+            <returns>The new error object.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsError.CreateUriError(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Creates a new JavaScript URIError error object
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="message">Message for the error object.</param>
+            <returns>The new error object.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsNativeFunctionPtr">
+            <summary>
+                A function callback.
+            </summary>
+            <param name="callee">
+                A <c>Function</c> object that represents the function being invoked.
+            </param>
+            <param name="isConstructCall">Indicates whether this is a regular call or a 'new' call.</param>
+            <param name="arguments">The arguments to the call.</param>
+            <param name="argumentCount">The number of arguments.</param>
+            <param name="callbackData">Callback data, if any.</param>
+            <returns>The result of the call, if any.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsNativeFunction">
+            <summary>
+                A function callback.
+            </summary>
+            <param name="callee">
+                A <c>Function</c> object that represents the function being invoked.
+            </param>
+            <param name="isConstructCall">Indicates whether this is a regular call or a 'new' call.</param>
+            <param name="arguments">The arguments to the call.</param>
+            <returns>The result of the call, if any.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsFunction.#ctor(Opportunity.ChakraBridge.UWP.JsNativeFunction)">
+            <summary>
+                Creates a new JavaScript function.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="function">The method to call when the function is invoked.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsFunction.Invoke(Opportunity.ChakraBridge.UWP.JsValue[])">
+            <summary>
+                Invokes a function.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="arguments">The arguments to the call.</param>
+            <returns>The <c>Value</c> returned from the function invocation, if any.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsFunction.ConstructObject(Opportunity.ChakraBridge.UWP.JsValue[])">
+            <summary>
+                Invokes a function as a constructor.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="arguments">The arguments to the call.</param>
+            <returns>The <c>Value</c> returned from the function invocation.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsNull">
+            <summary>
+                A JavaScript null value.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsNumber">
+            <summary>
+                A JavaScript number value.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsNumber.FromDouble(System.Double)">
+            <summary>
+                Creates a <c>Number</c> value from a <c>double</c> value.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="value">The value to be converted.</param>
+            <returns>The new <c>Number</c> value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsNumber.FromInt32(System.Int32)">
+            <summary>
+                Creates a <c>Number</c> value from a <c>int</c> value.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="value">The value to be converted.</param>
+            <returns>The new <c>Number</c> value.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsObject">
+            <summary>
+                A JavaScript object value.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.#ctor">
+            <summary>
+                Creates a new <c>Object</c>.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.#ctor(System.IntPtr,Opportunity.ChakraBridge.UWP.JsObjectFinalizeCallback)">
+            <summary>
+                Creates a new <c>Object</c> that stores some external data.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="data">External data that the object will represent. May be null.</param>
+            <param name="finalizer">
+                A callback for when the object is finalized. May be null.
+            </param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsObject.Prototype">
+            <summary>
+                Gets or sets the prototype of an object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.PreventExtension">
+            <summary>
+                Sets an object to not be extensible.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsObject.IsExtensionAllowed">
+            <summary>
+                Gets a value indicating whether an object is extensible or not.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsObject.HasExternalData">
+            <summary>
+                Gets a value indicating whether an object is an external object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsObject.ExternalData">
+            <summary>
+                Gets or sets the data in an external object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.GetOwnPropertyDescriptor(Opportunity.ChakraBridge.UWP.JsPropertyId)">
+            <summary>
+                Gets a property descriptor for an object's own property.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="propertyId">The ID of the property.</param>
+            <returns>The property descriptor.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.GetOwnPropertyNames">
+            <summary>
+                Gets the list of all properties on the object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>An array of property names.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.HasProperty(Opportunity.ChakraBridge.UWP.JsPropertyId)">
+            <summary>
+                Determines whether an object has a property.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="propertyId">The ID of the property.</param>
+            <returns>Whether the object (or a prototype) has the property.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.GetProperty(Opportunity.ChakraBridge.UWP.JsPropertyId)">
+            <summary>
+                Gets an object's property.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="id">The ID of the property.</param>
+            <returns>The value of the property.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.SetProperty(Opportunity.ChakraBridge.UWP.JsPropertyId,Opportunity.ChakraBridge.UWP.JsValue,System.Boolean)">
+            <summary>
+                Sets an object's property.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="id">The ID of the property.</param>
+            <param name="value">The new value of the property.</param>
+            <param name="useStrictRules">The property set should follow strict mode rules.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.DeleteProperty(Opportunity.ChakraBridge.UWP.JsPropertyId,System.Boolean)">
+            <summary>
+                Deletes an object's property.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="propertyId">The ID of the property.</param>
+            <param name="useStrictRules">The property set should follow strict mode rules.</param>
+            <returns>Whether the property was deleted.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.DefineProperty(Opportunity.ChakraBridge.UWP.JsPropertyId,Opportunity.ChakraBridge.UWP.JsObject)">
+            <summary>
+                Defines a new object's own property from a property descriptor.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="propertyId">The ID of the property.</param>
+            <param name="propertyDescriptor">The property descriptor.</param>
+            <returns>Whether the property was defined.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.HasIndexedProperty(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Test if an object has a value at the specified index.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="index">The index to test.</param>
+            <returns>Whether the object has an value at the specified index.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.GetIndexedProperty(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Retrieve the value at the specified index of an object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="index">The index to retrieve.</param>
+            <returns>The retrieved value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.SetIndexedProperty(Opportunity.ChakraBridge.UWP.JsValue,Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Set the value at the specified index of an object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="index">The index to set.</param>
+            <param name="value">The value to set.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsObject.DeleteIndexedProperty(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Delete the value at the specified index of an object.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="index">The index to delete.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsObjectFinalizeCallback">
+            <summary>
+                A finalization callback.
+            </summary>
+            <param name="data">
+                The external data that was passed in when creating the object being finalized.
+            </param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsPropertyId">
+            <summary>
+                A property identifier.
+            </summary>
+            <remarks>
+                Property identifiers are used to refer to properties of JavaScript objects instead of using
+                strings.
+            </remarks>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsPropertyId.id">
+            <summary>
+            The id.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.#ctor(System.IntPtr)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsPropertyId"/> struct. 
+            </summary>
+            <param name="id">The ID.</param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsPropertyId.Invalid">
+            <summary>
+                Gets an invalid ID.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsPropertyId.Name">
+            <summary>
+                Gets the name associated with the property ID.
+            </summary>
+            <remarks>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsPropertyId.Type">
+            <summary>
+                Gets the type of the property ID.
+            </summary>
+            <remarks>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.FromString(System.String)">
+            <summary>
+                Gets the property ID associated with the name. 
+            </summary>
+            <remarks>
+                <para>
+                Property IDs are specific to a context and cannot be used across contexts.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <param name="name">
+                The name of the property ID to get or create. The name may consist of only digits.
+            </param>
+            <returns>The property ID in this runtime for the given name.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.op_Implicit(System.String)~Opportunity.ChakraBridge.UWP.JsPropertyId">
+            <summary>
+                Gets the property ID associated with the name. 
+            </summary>
+            <remarks>
+                <para>
+                Property IDs are specific to a context and cannot be used across contexts.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <param name="name">
+                The name of the property ID to get or create. The name may consist of only digits.
+            </param>
+            <returns>The property ID in this runtime for the given name.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.op_Equality(Opportunity.ChakraBridge.UWP.JsPropertyId,Opportunity.ChakraBridge.UWP.JsPropertyId)">
+            <summary>
+                The equality operator for property IDs.
+            </summary>
+            <param name="left">The first property ID to compare.</param>
+            <param name="right">The second property ID to compare.</param>
+            <returns>Whether the two property IDs are the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.op_Inequality(Opportunity.ChakraBridge.UWP.JsPropertyId,Opportunity.ChakraBridge.UWP.JsPropertyId)">
+            <summary>
+                The inequality operator for property IDs.
+            </summary>
+            <param name="left">The first property ID to compare.</param>
+            <param name="right">The second property ID to compare.</param>
+            <returns>Whether the two property IDs are not the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.Equals(Opportunity.ChakraBridge.UWP.JsPropertyId)">
+            <summary>
+                Checks for equality between property IDs.
+            </summary>
+            <param name="other">The other property ID to compare.</param>
+            <returns>Whether the two property IDs are the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.Equals(System.Object)">
+            <summary>
+                Checks for equality between property IDs.
+            </summary>
+            <param name="obj">The other property ID to compare.</param>
+            <returns>Whether the two property IDs are the same.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.GetHashCode">
+            <summary>
+                The hash code.
+            </summary>
+            <returns>The hash code of the property ID.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsPropertyId.ToString">
+            <summary>
+                Converts the property ID to a string.
+            </summary>
+            <returns>The name of the property ID.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsPropertyIdType">
+            <summary>
+                Type enumeration of a JavaScript property
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsPropertyIdType.String">
+            <summary>
+                Type enumeration of a JavaScript string property
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsPropertyIdType.Symbol">
+            <summary>
+                Type enumeration of a JavaScript symbol property
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsRuntime">
+            <summary>
+                A Chakra runtime.
+            </summary>
+            <remarks>
+                <para>
+                Each Chakra runtime has its own independent execution engine, JIT compiler, and garbage 
+                collected heap. As such, each runtime is completely isolated from other runtimes.
+                </para>
+                <para>
+                Runtimes can be used on any thread, but only one thread can call into a runtime at any 
+                time.
+                </para>
+                <para>
+                NOTE: A JsRuntime, unlike other objects in the Chakra hosting API, is not 
+                garbage collected since it contains the garbage collected heap itself. A runtime will 
+                continue to exist until Dispose is called.
+                </para>
+            </remarks>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.GetRuntimes">
+            <summary>
+            Gets created runtimes.
+            </summary>
+            <returns>Collection of runtimes.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.Create(Opportunity.ChakraBridge.UWP.JsRuntimeAttributes,Opportunity.ChakraBridge.UWP.JsThreadServiceCallback)">
+            <summary>
+                Creates a new runtime.
+            </summary>
+            <param name="attributes">The attributes of the runtime to be created.</param>
+            <param name="threadServiceCallback">The thread service for the runtime. Can be null.</param>
+            <returns>The runtime created.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.Create(Opportunity.ChakraBridge.UWP.JsRuntimeAttributes)">
+            <summary>
+                Creates a new runtime.
+            </summary>
+            <param name="attributes">The attributes of the runtime to be created.</param>
+            <returns>The runtime created.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.Create">
+            <summary>
+                Creates a new runtime.
+            </summary>
+            <returns>The runtime created.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.#ctor(Opportunity.ChakraBridge.UWP.JsRuntimeHandle)">
+            <summary>
+            Create JsRuntime with initialized handle.
+            </summary>
+            <param name="handle">The handle.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.Dispose">
+            <summary>
+                Disposes a runtime.
+            </summary>
+            <remarks>
+                Once a runtime has been disposed, all resources owned by it are invalid and cannot be used.
+                If the runtime is active (i.e. it is set to be current on a particular thread), it cannot 
+                be disposed.
+            </remarks>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntime.handle">
+            <summary>
+            The handle.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsRuntime.IsValid">
+            <summary>
+                Gets a value indicating whether the runtime is valid.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsRuntime.MemoryUsage">
+            <summary>
+                Gets the current memory usage for a runtime.
+            </summary>
+            <remarks>
+                Memory usage can be always be retrieved, regardless of whether or not the runtime is active
+                on another thread.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsRuntime.MemoryLimit">
+            <summary>
+                Gets or sets the current memory limit for a runtime.
+            </summary>
+            <remarks>
+                The memory limit of a runtime can be always be retrieved, regardless of whether or not the 
+                runtime is active on another thread.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsRuntime.Disabled">
+            <summary>
+                Gets or sets a value indicating whether script execution is disabled in the runtime.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.CollectGarbage">
+            <summary>
+                Performs a full garbage collection.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.SetMemoryAllocationCallback(System.IntPtr,Opportunity.ChakraBridge.UWP.JsMemoryAllocationCallback)">
+            <summary>
+                Sets a memory allocation callback for specified runtime
+            </summary>
+            <remarks>
+                <para>
+                Registering a memory allocation callback will cause the runtime to call back to the host 
+                whenever it acquires memory from, or releases memory to, the OS. The callback routine is
+                called before the runtime memory manager allocates a block of memory. The allocation will
+                be rejected if the callback returns false. The runtime memory manager will also invoke the
+                callback routine after freeing a block of memory, as well as after allocation failures. 
+                </para>
+                <para>
+                The callback is invoked on the current runtime execution thread, therefore execution is 
+                blocked until the callback completes.
+                </para>
+                <para>
+                The return value of the callback is not stored; previously rejected allocations will not
+                prevent the runtime from invoking the callback again later for new memory allocations.
+                </para>
+            </remarks>
+            <param name="callbackState">
+                User provided state that will be passed back to the callback.
+            </param>
+            <param name="allocationCallback">
+                Memory allocation callback to be called for memory allocation events.
+            </param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.SetBeforeCollectCallback(System.IntPtr,Opportunity.ChakraBridge.UWP.JsBeforeCollectCallback)">
+            <summary>
+                Sets a callback function that is called by the runtime before garbage collection.
+            </summary>
+            <remarks>
+                <para>
+                The callback is invoked on the current runtime execution thread, therefore execution is 
+                blocked until the callback completes.
+                </para>
+                <para>
+                The callback can be used by hosts to prepare for garbage collection. For example, by 
+                releasing unnecessary references on Chakra objects.
+                </para>
+            </remarks>
+            <param name="callbackState">
+                User provided state that will be passed back to the callback.
+            </param>
+            <param name="beforeCollectCallback">The callback function being set.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsRuntime.CreateContext">
+            <summary>
+                Creates a script context for running scripts.
+            </summary>
+            <remarks>
+                Each script context has its own global object that is isolated from all other script 
+                contexts.
+            </remarks>
+            <returns>The created script context.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes">
+            <summary>
+                Attributes of a runtime.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.None">
+            <summary>
+                No special attributes.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.DisableBackgroundWork">
+            <summary>
+                The runtime will not do any work (such as garbage collection) on background threads.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.AllowScriptInterrupt">
+            <summary>
+                The runtime should support reliable script interruption. This increases the number of
+                places where the runtime will check for a script interrupt request at the cost of a
+                small amount of runtime performance.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.EnableIdleProcessing">
+            <summary>
+                Host will call Idle, so enable idle processing. Otherwise, the runtime will manage
+                memory slightly more aggressively.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.DisableNativeCodeGeneration">
+            <summary>
+                Runtime will not generate native code.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.DisableEval">
+            <summary>
+                Using Eval or Function constructor will throw an exception.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.EnableExperimentalFeatures">
+            <summary>
+                Runtime will enable all experimental features.
+            </summary>
+            
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsRuntimeAttributes.DispatchSetExceptionsToDebugger">
+            <summary>
+                Calling <c>JsSetException</c> will also dispatch the exception to the script debugger
+                (if any) giving the debugger a chance to break on the exception.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsScriptException">
+            <summary>
+                A script exception.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsScriptException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,Opportunity.ChakraBridge.UWP.JsError)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsScriptException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="error">The JavaScript error object.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsScriptException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,Opportunity.ChakraBridge.UWP.JsError,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsScriptException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="error">The JavaScript error object.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsScriptException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsScriptException"/> class.
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+            <param name="innerException">The exception caused this exception.</param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsScriptException.Error">
+            <summary>
+                Gets a JavaScript object representing the script error.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsScriptException.CreateFromContext(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String)">
+            <summary>
+                Gets a script exception by <see cref="M:Opportunity.ChakraBridge.UWP.Native.JsGetAndClearException(Opportunity.ChakraBridge.UWP.JsValueRef@)"/>.
+            </summary>
+            <returns>
+                A script exception of current context.
+            </returns>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message used if no messege find from returned Js error object.</param>
+            <exception cref="T:Opportunity.ChakraBridge.UWP.JsUsageException">The runtime of the current context is not in an exception state.</exception>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsSerializedScriptLoadSourceCallback">
+            <summary>
+                Called by the runtime to load the source code of the serialized script.
+                The caller must keep the script buffer valid until the JsSerializedScriptUnloadCallback.
+            </summary>
+            <param name="sourceContext">The context passed to Js[Parse|Run]SerializedScriptWithCallback</param>
+            <param name="scriptBuffer">The script returned.</param>
+            <returns>
+                true if the operation succeeded, false otherwise.
+            </returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsSerializedScriptUnloadCallback">
+            <summary>
+                Called by the runtime when it is finished with all resources related to the script execution.
+                The caller should free the source if loaded, the byte code, and the context at this time.
+            </summary>
+            <param name="sourceContext">The context passed to Js[Parse|Run]SerializedScriptWithCallback</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsThreadServiceCallback">
+            <summary>
+                A thread service callback.
+            </summary>
+            <remarks>
+                The host can specify a background thread service when creating a runtime. If 
+                specified, then background work items will be passed to the host using this callback. The
+                host is expected to either begin executing the background work item immediately and return
+                true or return false and the runtime will handle the work item in-thread.
+            </remarks>
+            <param name="callbackFunction">The callback for the background work item.</param>
+            <param name="callbackData">The data argument to be passed to the callback.</param>
+            <returns>Whether the thread service will execute the callback.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsBackgroundWorkItemCallback">
+            <summary>
+                A background work item callback.
+            </summary>
+            <remarks>
+                This is passed to the host's thread service (if provided) to allow the host to 
+                invoke the work item callback on the background thread of its choice.
+            </remarks>
+            <param name="callbackData">Data argument passed to the thread service.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsBeforeCollectCallback">
+            <summary>
+                A callback called before collection.
+            </summary>
+            <param name="callbackState">The state passed to SetBeforeCollectCallback.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsMemoryAllocationCallback">
+            <summary>
+                User implemented callback routine for memory allocation events
+            </summary>
+            <param name="callbackState">The state passed to SetRuntimeMemoryAllocationCallback.</param>
+            <param name="allocationEvent">The type of type allocation event.</param>
+            <param name="allocationSize">The size of the allocation.</param>
+            <returns>
+                For the Allocate event, returning true allows the runtime to continue with 
+                allocation. Returning false indicates the allocation request is rejected. The return value
+                is ignored for other allocation events.
+            </returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsString">
+            <summary>
+                A JavaScript string value.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsString.Length">
+            <summary>
+                Gets the length of a <c>String</c> value.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The length of the string.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsString.FromString(System.String)">
+            <summary>
+                Creates a <c>String</c> value from a string pointer.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <param name="value">The string  to convert to a <c>String</c> value.</param>
+            <returns>The new <c>String</c> value.</returns>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsSymbol">
+            <summary>
+                A JavaScript symbol value.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsTypedArrayType">
+            <summary>
+                The type of a typed JavaScript array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Int8">
+            <summary>
+                An int8 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Uint8">
+            <summary>
+                An uint8 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Uint8Clamped">
+            <summary>
+                An uint8 clamped array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Int16">
+            <summary>
+                An int16 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Uint16">
+            <summary>
+                An uint16 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Int32">
+            <summary>
+                An int32 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Uint32">
+            <summary>
+                An uint32 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Float32">
+            <summary>
+                A float32 array.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsTypedArrayType.Float64">
+            <summary>
+                A float64 array.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsUsageException">
+            <summary>
+                An API usage exception occurred.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsUsageException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsUsageException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsUsageException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsUsageException"/> class. 
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsUsageException.#ctor(Opportunity.ChakraBridge.UWP.JsErrorCode,System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsUsageException"/> class.
+            </summary>
+            <param name="code">The error code returned.</param>
+            <param name="message">The error message.</param>
+            <param name="innerException">The exception caused this exception.</param>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsUndefined">
+            <summary>
+                A JavaScript undefined value.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsValue">
+            <summary>
+                A JavaScript value.
+            </summary>
+            <remarks>
+                A JavaScript value is one of the following types of values: Undefined, Null, Boolean, 
+                String, Number, or Object.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValue.True">
+            <summary>
+                Gets the value of <c>true</c> in the current script context.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValue.False">
+            <summary>
+                Gets the value of <c>false</c> in the current script context.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValue.Undefined">
+            <summary>
+                Gets the value of <c>undefined</c> in the current script context.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValue.Null">
+            <summary>
+                Gets the value of <c>null</c> in the current script context.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValue.ValueType">
+            <summary>
+                Gets the JavaScript type of the value.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The type of the value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.AddRef">
+            <summary>
+                Adds a reference to the object.
+            </summary>
+            <remarks>
+                This only needs to be called on objects that are not going to be stored somewhere on 
+                the stack. Calling AddRef ensures that the JavaScript object the value refers to will not be freed 
+                until Release is called
+            </remarks>
+            <returns>The object's new reference count.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.Release">
+            <summary>
+                Releases a reference to the object.
+            </summary>
+            <remarks>
+                Removes a reference that was created by AddRef.
+            </remarks>
+            <returns>The object's new reference count.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToBoolean">
+            <summary>
+                Retrieves the <c>bool</c> value of a <c>Boolean</c> value.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToDouble">
+            <summary>
+                Retrieves the <c>double</c> value of a <c>Number</c> value.
+            </summary>
+            <remarks>
+                <para>
+                This function retrieves the value of a Number value. It will fail with 
+                <c>InvalidArgument</c> if the type of the value is not <c>Number</c>.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <returns>The <c>double</c> value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToInt32">
+            <summary>
+                Retrieves the <c>int</c> value of a <c>Number</c> value.
+            </summary>
+            <remarks>
+                <para>
+                This function retrieves the value of a Number value. It will fail with
+                <c>InvalidArgument</c> if the type of the value is not <c>Number</c>.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <returns>The <c>int</c> value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToString">
+            <summary>
+                Retrieves the string pointer of a <c>String</c> value.
+            </summary>
+            <remarks>
+                <para>
+                This function retrieves the string pointer of a <c>String</c> value. It will fail with 
+                <c>InvalidArgument</c> if the type of the value is not <c>String</c>.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToJsBoolean">
+            <summary>
+                Converts the value to <c>Boolean</c> using regular JavaScript semantics.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToJsNumber">
+            <summary>
+                Converts the value to <c>Number</c> using regular JavaScript semantics.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToJsString">
+            <summary>
+                Converts the value to <c>String</c> using regular JavaScript semantics.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToJsObject">
+            <summary>
+                Converts the value to <c>Object</c> using regular JavaScript semantics.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.ToJsFunction">
+            <summary>
+                Converts the value to <c>Function</c> using regular JavaScript semantics.
+            </summary>
+            <remarks>
+                Requires an active script context.
+            </remarks>
+            <returns>The converted value.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.Equals(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Compare two JavaScript values for equality.
+            </summary>
+            <remarks>
+                <para>
+                This function is equivalent to the "==" operator in JavaScript.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <param name="other">The object to compare.</param>
+            <returns>Whether the values are equal.</returns>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValue.StrictEquals(Opportunity.ChakraBridge.UWP.JsValue)">
+            <summary>
+                Compare two JavaScript values for strict equality.
+            </summary>
+            <remarks>
+                <para>
+                This function is equivalent to the "===" operator in JavaScript.
+                </para>
+                <para>
+                Requires an active script context.
+                </para>
+            </remarks>
+            <param name="other">The object to compare.</param>
+            <returns>Whether the values are strictly equal.</returns>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueRef.Value">
+            <summary>
+            The reference.
+            </summary>
+        </member>
+        <member name="M:Opportunity.ChakraBridge.UWP.JsValueRef.#ctor(System.IntPtr)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Opportunity.ChakraBridge.UWP.JsValueRef"/> struct.
+            </summary>
+            <param name="value">The reference.</param>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValueRef.Invalid">
+            <summary>
+                Gets an invalid value.
+            </summary>
+        </member>
+        <member name="P:Opportunity.ChakraBridge.UWP.JsValueRef.IsValid">
+            <summary>
+                Gets a value indicating whether the value is valid.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.JsValueType">
+            <summary>
+                The JavaScript type of a JsValue.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Undefined">
+            <summary>
+                The value is the <c>undefined</c> value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Null">
+            <summary>
+                The value is the <c>null</c> value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Number">
+            <summary>
+                The value is a JavaScript number value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.String">
+            <summary>
+                The value is a JavaScript string value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Boolean">
+            <summary>
+                The value is a JavaScript Boolean value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Object">
+            <summary>
+                The value is a JavaScript object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Function">
+            <summary>
+                The value is a JavaScript function object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Error">
+            <summary>
+                The value is a JavaScript error object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Array">
+            <summary>
+                The value is a JavaScript array object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.Symbol">
+            <summary>
+                The value is a JavaScript symbol object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.ArrayBuffer">
+            <summary>
+                The value is a JavaScript ArrayBuffer object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.TypedArray">
+            <summary>
+                The value is a JavaScript typed array object value.
+            </summary>
+        </member>
+        <member name="F:Opportunity.ChakraBridge.UWP.JsValueType.DataView">
+            <summary>
+                The value is a JavaScript DataView object value.
+            </summary>
+        </member>
+        <member name="T:Opportunity.ChakraBridge.UWP.Native">
+            <summary>
+                Native interfaces.
+            </summary>
+        </member>
+    </members>
+</doc>

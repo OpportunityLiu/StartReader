@@ -11,54 +11,35 @@ using StartReader.DataExchange.Request;
 using StartReader.DataExchange.Response;
 using Windows.ApplicationModel.AppService;
 using Windows.Web.Http;
+using Opportunity.ChakraBridge.UWP;
+using System.Text;
 
 namespace StartReader.ExtensionProvider
 {
 
-    internal class MiaoBiGeProvider : DataExchangeProviderEx
+    internal class TwoKXiaoShuo : DataExchangeProviderEx
     {
-        public MiaoBiGeProvider()
-            : base(new Uri("https://www.miaobige.com/"))
+        public TwoKXiaoShuo()
+            : base(new Uri("https://www.2kxs.com/"))
         {
-        }
-
-        private ChakraBridge.ChakraHost chakraHost;
-
-        private ChakraBridge.ChakraHost GetScriptHost()
-        {
-            if (this.chakraHost == null)
-            {
-                this.chakraHost = new ChakraBridge.ChakraHost();
-                this.chakraHost.RunScript(@"
-var $ = 
-{
-    post: function(uri,data,cb)
-    {
-        this.uri = uri;
-        this.data = JSON.stringify(data);
-    }
-};");
-                this.chakraHost.DettachConetxt();
-            }
-            return this.chakraHost;
         }
 
         private static readonly Regex idReg = new Regex(@"^.+/(\d+)/?.+?$");
 
-        private static readonly Uri searchUri = new Uri("https://www.miaobige.com/search/");
+        private static readonly string searchUri = "https://www.2kxs.com/modules/article/search.php?searchtype=keywords&searchkey=";
         protected override async Task<SearchResponse> SearchAsync(SearchRequest request)
         {
-            var content = new HttpBufferContent(GBEncoding.GetBytes($"s={request.Keyword}").AsBuffer())
+            var sb = new StringBuilder("https://www.2kxs.com/modules/article/search.php?searchtype=keywords&searchkey=");
+            foreach (var item in GBEncoding.GetBytes(request.Keyword))
             {
-                Headers =
-                {
-                     ContentType = new Windows.Web.Http.Headers.HttpMediaTypeHeaderValue("application/x-www-form-urlencoded")
-                }
-            };
-            var doc = await PostDoc(searchUri, content);
+                sb.Append('%');
+                sb.Append(item.ToString("X2"));
+            }
+            var uri = new Uri(sb.ToString());
+            var doc = await GetDoc(uri);
             var r = new SearchResponse();
-            var box = doc.GetElementbyId("sitembox");
-            if (box is null)
+            var content = doc.GetElementbyId("content");
+            if (content is null)
             {
                 var bf = new BookDataBrief();
                 parseBookMeta(bf, doc);
@@ -67,7 +48,7 @@ var $ =
             }
             else
             {
-                foreach (var item in box.Elements("dl"))
+                foreach (var item in content.SelectNodes("table/tr[position()>1]"))
                 {
                     var title = item.SelectSingleNode("./dd[1]/h3/a");
                     var key = title.GetAttributeValue("href", "");
@@ -174,16 +155,27 @@ var $ =
             if (script != null)
             {
                 var scr = script.GetInnerText();
-                var rt = GetScriptHost();
-                rt.AttachConetxt();
-                rt.RunScript(scr);
-                var uri = rt.RunScript("$.uri").CoalesceNullOrEmpty("/ajax/content/");
-                var data = JsonConvert.DeserializeObject<IDictionary<string, string>>(rt.RunScript("$.data"));
-                rt.DettachConetxt();
-                var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
-                var contentDoc = new HtmlDocument();
-                contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);
-                content = contentDoc.DocumentNode;
+                using (var rt = JsRuntime.Create())
+                {
+                    JsContext.Current = rt.CreateContext();
+                    JsContext.RunScript(@"
+var $ = 
+{
+    post: function(uri,data,cb)
+    {
+        this.uri = uri;
+        this.data = JSON.stringify(data);
+    }
+};");
+                    JsContext.RunScript(scr);
+                    var uri = JsContext.RunScript("$.uri").ToString().CoalesceNullOrEmpty("/ajax/content/");
+                    var data = JsonConvert.DeserializeObject<IDictionary<string, string>>(JsContext.RunScript("$.data").ToString());
+                    JsContext.Current = default;
+                    var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
+                    var contentDoc = new HtmlDocument();
+                    contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);
+                    content = contentDoc.DocumentNode;
+                }
             }
             chapter.Content = string.Join("\n", content.Elements("p").EmptyIfNull().Select(p => p.GetInnerText()));
 
