@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="DataExchangeProviderEx.cs" />
     <Compile Include="DefaultProvider.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="TwoKXiaoShuo.cs" />
     <Compile Include="MiaoBiGe.cs" />
@@ -151,8 +152,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Opportunity.ChakraBridge.UWP">
-      <HintPath>..\JsBridge\Opportunity.ChakraBridge.UWP.dll</HintPath>
+    <Reference Include="Opportunity.ChakraBridge.UWP, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JsBridge\Opportunity.ChakraBridge.UWP.winmd</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

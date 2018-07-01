@@ -69,8 +69,8 @@ namespace StartReader.ExtensionProvider
                         Description = des.GetInnerText(),
                         WordCount = int.Parse(wordCount.GetInnerText()),
                         Tags = tags.Select(n => n.GetInnerText()).ToArray(),
-                        IsFinished = status.GetInnerText() == "已完结",
-                        LastestChapter = new ChapterDataBrief
+                        IsFinished = status.GetInnerText().Contains("完结"),
+                        LatestChapter = new ChapterDataBrief
                         {
                             UpdateTime = DateTime.Parse(latestTime.GetInnerText()),
                             Key = latestName.GetAttribute("href", ""),
@@ -127,12 +127,11 @@ namespace StartReader.ExtensionProvider
             return r;
         }
 
-        private static readonly Regex chpInfoRegex = new Regex(@"(^|,|;|\s)(?<key>\w+)\s*=\s*""(?<value>.+?)""", RegexOptions.ExplicitCapture);
         private async Task<string> parseChapterPageAsync(ChapterDataDetailed chapter, HtmlDocument document)
         {
             // var preview = "7966638.html",next = "7966640.html",bid = "11341",book="剑娘",zid = "7966639",chapter = "第893章 舰娘再现";document.onkeydown= jumpPage;
-            var prop = chpInfoRegex.Matches(document.DocumentNode.SelectSingleNode("/html/head/script[last()]").GetInnerText())
-                .OfType<Match>().ToDictionary(m => m.Groups["key"].Value, m => m.Groups["value"].Value);
+            var rscript = document.DocumentNode.SelectNodes("/html/head/script").Last(n => !n.GetInnerText().IsNullOrWhiteSpace());
+            var prop = Helpers.ParseJsKvp(rscript.GetInnerText());
             chapter.Key = prop["zid"];
             chapter.Title = prop["chapter"];
             var nk = prop["next"]; // 123567.html
@@ -156,7 +155,7 @@ namespace StartReader.ExtensionProvider
                 var scr = script.GetInnerText();
                 using (var rt = JsRuntime.Create())
                 {
-                    JsContext.Current = rt.CreateContext();
+                    var context = JsContext.Current = rt.CreateContext();
                     JsContext.RunScript(@"
 var $ = 
 {
@@ -169,7 +168,7 @@ var $ =
                     JsContext.RunScript(scr);
                     var uri = JsContext.RunScript("$.uri").ToString().CoalesceNullOrEmpty("/ajax/content/");
                     var data = JsonConvert.DeserializeObject<IDictionary<string, string>>(JsContext.RunScript("$.data").ToString());
-                    JsContext.Current = default;
+                    JsContext.Current = null;
                     var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
                     var contentDoc = new HtmlDocument();
                     contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);
@@ -189,11 +188,11 @@ var $ =
             book.Title = head.SelectSingleNode("./meta[@property='og:novel:book_name']").GetAttribute("content", "");
             book.Author = head.SelectSingleNode("./meta[@property='og:novel:author']").GetAttribute("content", "");
             book.CoverUri = head.SelectSingleNode("./meta[@property='og:image']").GetAttribute("content", BaseUri, null);
-            book.IsFinished = "已完结" == head.SelectSingleNode("./meta[@property='og:novel:status']").GetAttribute("content", "");
-            book.LastestChapter = new ChapterDataBrief
+            book.IsFinished = head.SelectSingleNode("./meta[@property='og:novel:status']").GetAttribute("content", "").Contains("完结");
+            book.LatestChapter = new ChapterDataBrief
             {
                 UpdateTime = DateTime.Parse(head.SelectSingleNode("./meta[@property='og:novel:update_time']").GetAttribute("content", "")),
-                Key = head.SelectSingleNode("./meta[@property='og:novel:latest_chapter_url']").GetAttribute("content", ""),
+                Key = idReg.Match(head.SelectSingleNode("./meta[@property='og:novel:latest_chapter_url']").GetAttribute("content", "")).Groups[1].Value,
                 Title = head.SelectSingleNode("./meta[@property='og:novel:latest_chapter_name']").GetAttribute("content", ""),
             };
         }

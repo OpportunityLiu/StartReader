@@ -43,7 +43,7 @@ namespace StartReader.DataExchange.Model
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         [NotMapped]
-        public ChapterDataBrief LastestChapter { get; set; }
+        public ChapterDataBrief LatestChapter { get; set; }
 
         [DefaultValue(-1)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]

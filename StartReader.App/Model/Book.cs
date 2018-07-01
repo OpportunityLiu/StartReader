@@ -50,7 +50,7 @@ namespace StartReader.App.Model
             Debug.Assert(dataSource.ExtensionId == ExtensionId);
             Debug.Assert(dataSource.PackageFamilyName == PackageFamilyName);
 
-            LastestChapter = book.LastestChapter;
+            LatestChapter = book.LatestChapter;
             Tags = book.Tags;
 
             AlternativeTitle = book.AlternativeTitle.CoalesceNullOrWhiteSpace(AlternativeTitle);
