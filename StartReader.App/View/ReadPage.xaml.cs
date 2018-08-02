@@ -47,19 +47,12 @@ namespace StartReader.App.View
 
         new ReadVM ViewModel { get => (ReadVM)base.ViewModel; set => base.ViewModel = value; }
 
-        private bool autoNavEnabled = false;
-
-        protected override void OnViewModelChanged(ViewModelBase oldValue, ViewModelBase newValue)
-        {
-            this.autoNavEnabled = false;
-        }
-
         private async void rtbContent_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            this.autoNavEnabled = false;
             var s = (RichTextBlock)sender;
             var oldValue = s.Tag as string;
             var newValue = args.NewValue as string;
+            var position = ViewModel.Position;
             if (newValue != oldValue)
             {
                 s.Tag = newValue;
@@ -76,39 +69,19 @@ namespace StartReader.App.View
                         s.Blocks.Add(new Paragraph { Inlines = { new Run { Text = item } }, Margin = new Thickness(0, 0, 0, 12) });
                     }
                 }
-
-                this.svContent.UpdateLayout();
             }
             await Dispatcher.YieldIdle();
-            var zero = this.spPrevious.ActualHeight;
-            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
-            var offset = ViewModel.Position * one + zero;
-            this.svContent.ChangeView(null, offset, null, true);
-            await Task.Delay(250);
-            this.autoNavEnabled = true;
+            var svContent = s.Ancestors<ScrollViewer>().First();
+            var offset = position * svContent.ScrollableHeight;
+            svContent.ChangeView(null, offset, null, true);
         }
 
         private void svContent_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            if (e.IsIntermediate || !this.autoNavEnabled)
+            if (e.IsIntermediate)
                 return;
-            var zero = this.spPrevious.ActualHeight;
-            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
-            this.ViewModel.Position = (this.svContent.VerticalOffset - zero) / one;
-            if (this.svContent.VerticalOffset < 1)
-                ViewModel.GoToChapter.Execute(ViewModel.Previous?.Index ?? -1);
-            else if (this.svContent.VerticalOffset > this.svContent.ScrollableHeight - 1)
-                ViewModel.GoToChapter.Execute(ViewModel.Next?.Index ?? -1);
-        }
-
-        private void page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (!this.autoNavEnabled)
-                return;
-            var zero = this.spPrevious.ActualHeight;
-            var one = this.svContent.ScrollableHeight - zero - this.spNext.ActualHeight;
-            var offset = ViewModel.Position * one + zero;
-            this.svContent.ChangeView(null, offset, null, true);
+            var s = (ScrollViewer)sender;
+            ViewModel.Position = s.VerticalOffset / s.ScrollableHeight;
         }
     }
 }

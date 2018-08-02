@@ -36,7 +36,7 @@ namespace StartReader.App.Migrations
                 columns: table => new
                 {
                     BookId = table.Column<int>(nullable: false),
-                    Index = table.Column<int>(nullable: false),
+                    ChapterId = table.Column<int>(nullable: false),
                     Content = table.Column<string>(nullable: true),
                     Key = table.Column<string>(nullable: false),
                     Title = table.Column<string>(nullable: false),
@@ -46,7 +46,7 @@ namespace StartReader.App.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chapters", x => new { x.BookId, x.Index });
+                    table.PrimaryKey("PK_Chapters", x => new { x.BookId, x.ChapterId });
                     table.ForeignKey(
                         name: "FK_Chapters_Books_BookId",
                         column: x => x.BookId,

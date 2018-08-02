@@ -7,47 +7,30 @@
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
-                SizeChanged="page_SizeChanged"
+                xmlns:model="using:StartReader.App.Model"
                 NavigationCacheMode="Enabled"
-                Title="{x:Bind getTitle(ViewModel.Current.Title, ViewModel.Current.VolumeTitle, ViewModel.Current.Book.Title), Mode=OneWay}"
+                Title="{x:Bind getTitle(ViewModel.BookView.CurrentItem.Title, ViewModel.BookView.CurrentItem.VolumeTitle, ViewModel.Book.Title), Mode=OneWay}"
                 Padding="{x:Bind VisibleBounds, Mode=OneWay}"
                 mc:Ignorable="d"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Grid>
-    <ScrollViewer x:Name="svContent"
-                  ViewChanged="svContent_ViewChanged"
-                  ext:FrameworkElementExtensions.EnableActualSizeBinding="True">
-      <StackPanel>
-        <StackPanel x:Name="spPrevious"
-                    Padding="0,20">
-          <TextBlock Visibility="{x:Bind ViewModel.Previous, Mode=OneWay, Converter={StaticResource NullToCollpsedConverter}}"
-                     Text="上一章节"
-                     HorizontalAlignment="Center" />
-          <TextBlock Visibility="{x:Bind ViewModel.Previous, Mode=OneWay, Converter={StaticResource NullToVisibleConverter}}"
-                     Text="已经到达第一章"
-                     HorizontalAlignment="Center" />
-          <TextBlock Text="{x:Bind ViewModel.Previous.Title, Mode=OneWay, FallbackValue=''}"
-                     HorizontalAlignment="Center" />
-        </StackPanel>
-        <RichTextBlock x:Name="rtbContent"
-                       FontSize="26"
-                       MinHeight="{x:Bind svContent.(ext:FrameworkElementExtensions.ActualHeight), Mode=OneWay}"
-                       VerticalAlignment="Center"
-                       DataContext="{x:Bind ViewModel.Current.Content, Mode=OneWay}"
-                       DataContextChanged="rtbContent_DataContextChanged" />
-        <StackPanel x:Name="spNext"
-                    Padding="0,20">
-          <TextBlock Visibility="{x:Bind ViewModel.Next, Mode=OneWay, Converter={StaticResource NullToCollpsedConverter}}"
-                     Text="下一章节"
-                     HorizontalAlignment="Center" />
-          <TextBlock Visibility="{x:Bind ViewModel.Next, Mode=OneWay, Converter={StaticResource NullToVisibleConverter}}"
-                     Text="已经到达最后一章"
-                     HorizontalAlignment="Center" />
-          <TextBlock Text="{x:Bind ViewModel.Next.Title, Mode=OneWay, FallbackValue=''}"
-                     HorizontalAlignment="Center" />
-        </StackPanel>
-      </StackPanel>
-    </ScrollViewer>
+    <FlipView x:Name="fvContent" ItemsSource="{x:Bind ViewModel.BookView, Mode=OneWay}">
+      <FlipView.ItemTemplate>
+        <DataTemplate x:DataType="model:Chapter">
+          <ScrollViewer x:Name="svContent"
+                        ViewChanged="svContent_ViewChanged"
+                        ext:FrameworkElementExtensions.EnableActualSizeBinding="True">
+            <StackPanel>
+              <RichTextBlock x:Name="rtbContent"
+                             FontSize="24"
+                             VerticalAlignment="Center"
+                             DataContext="{x:Bind Content, Mode=OneWay}"
+                             DataContextChanged="rtbContent_DataContextChanged" />
+            </StackPanel>
+          </ScrollViewer>
+        </DataTemplate>
+      </FlipView.ItemTemplate>
+    </FlipView>
   </Grid>
 </views:MvvmPage>

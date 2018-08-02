@@ -60,7 +60,7 @@ namespace StartReader.App.Model
                 .HasIndex(s => new { s.PackageFamilyName, s.ExtensionId });
 
             modelBuilder.Entity<Chapter>()
-                .HasKey(c => new { c.BookId, c.Index });
+                .HasKey(c => new { c.BookId, c.ChapterId });
             modelBuilder.Entity<Chapter>()
                 .HasOne(c => c.Book)
                 .WithMany(b => b.ChaptersData)

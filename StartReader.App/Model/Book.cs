@@ -72,11 +72,11 @@ namespace StartReader.App.Model
                 var i = 0;
                 foreach (var item in detailed.Chapters)
                 {
-                    newChpData.Add(new Chapter(this, i, item));
                     i++;
+                    newChpData.Add(new Chapter(this, i/* 1-based index */, item));
                 }
                 ChaptersData.Update(newChpData,
-                    (o, n) => o.Index.CompareTo(n.Index),
+                    (o, n) => o.ChapterId.CompareTo(n.ChapterId),
                     (existChp, newChp) => existChp.Update(newChp));
             }
         }

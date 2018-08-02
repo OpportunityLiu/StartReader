@@ -11,7 +11,7 @@ using StartReader.DataExchange.Request;
 using StartReader.DataExchange.Response;
 using Windows.ApplicationModel.AppService;
 using Windows.Web.Http;
-using Opportunity.ChakraBridge.UWP;
+using Opportunity.ChakraBridge.WinRT;
 using System.Text;
 
 namespace StartReader.ExtensionProvider

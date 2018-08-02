@@ -61,7 +61,7 @@ namespace StartReader.App.Migrations
                 {
                     b.Property<int>("BookId");
 
-                    b.Property<int>("Index");
+                    b.Property<int>("ChapterId");
 
                     b.Property<string>("Content");
 
@@ -77,7 +77,7 @@ namespace StartReader.App.Migrations
 
                     b.Property<int>("WordCount");
 
-                    b.HasKey("BookId", "Index");
+                    b.HasKey("BookId", "ChapterId");
 
                     b.ToTable("Chapters");
                 });

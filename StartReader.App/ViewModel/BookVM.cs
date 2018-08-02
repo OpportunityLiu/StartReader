@@ -31,7 +31,7 @@ namespace StartReader.App.ViewModel
             using (var bs = BookShelf.Create())
             {
                 Book = bs.Books.Find(bookId);
-                bs.Entry(Book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
+                bs.Entry(Book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.ChapterId).Load();
             }
             if (Book.ChaptersData.IsEmpty())
                 Refersh.Execute();
@@ -53,7 +53,7 @@ namespace StartReader.App.ViewModel
             using (var bs = BookShelf.Create())
             {
                 var book = bs.Books.Find(this.book.Id);
-                bs.Entry(book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
+                bs.Entry(book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.ChapterId).Load();
                 var data = await book.FindSource().ExecuteAsync(new GetBookRequest { BookKey = book.Key, NeedDetail = true });
                 book.Update(data.BookData, data.Source);
                 await bs.SaveChangesAsync();
@@ -67,7 +67,7 @@ namespace StartReader.App.ViewModel
             using (var bs = BookShelf.Create())
             {
                 var book = bs.Books.Find(this.book.Id);
-                bs.Entry(book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.Index).Load();
+                bs.Entry(book).Collection(b => b.ChaptersData).Query().OrderBy(c => c.ChapterId).Load();
                 try
                 {
                     var chpsToLoad = book.ChaptersData.Where(ch => ch.Content.IsNullOrEmpty()).ToList();
@@ -104,8 +104,8 @@ namespace StartReader.App.ViewModel
         public async void Open(Chapter chapter)
         {
             var vm = ViewModelFactory.Get<ReadVM>(this.book.Id.ToString());
-            vm.GoToChapter.Execute(-1);
-            vm.GoToChapter.Execute(chapter.Index);
+            vm.BookView.MoveCurrentToPosition(-1);
+            vm.BookView.MoveCurrentToPosition(chapter.ChapterId - 1);
             await Navigator.GetForCurrentView().NavigateAsync(typeof(ReadPage), chapter.Book.Id);
         }
     }

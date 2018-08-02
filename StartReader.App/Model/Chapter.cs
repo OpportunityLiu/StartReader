@@ -14,16 +14,16 @@ namespace StartReader.App.Model
     {
         private Chapter() { }
 
-        public Chapter(Book book, int index, ChapterDataBrief item)
-            : this(book.Id, index, item)
+        public Chapter(Book book, int chapterId, ChapterDataBrief item)
+            : this(book.Id, chapterId, item)
         {
             this.Book = book;
         }
 
-        public Chapter(int bookId, int index, ChapterDataBrief item)
+        public Chapter(int bookId, int chapterId, ChapterDataBrief item)
         {
             this.BookId = bookId;
-            this.Index = index;
+            this.ChapterId = chapterId;
             Update(item);
         }
 
@@ -32,7 +32,7 @@ namespace StartReader.App.Model
             if (chapter is Chapter db)
             {
                 Debug.Assert(db.BookId == BookId);
-                Debug.Assert(db.Index == Index);
+                Debug.Assert(db.ChapterId == ChapterId);
                 Debug.Assert(db.Book == Book || db.Book is null || Book is null);
             }
 
@@ -55,6 +55,6 @@ namespace StartReader.App.Model
         public Book Book { get; set; }
 
         [Required]
-        public int Index { get; set; }
+        public int ChapterId { get; set; }
     }
 }

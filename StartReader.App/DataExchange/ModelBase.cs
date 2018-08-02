@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StartReader.DataExchange.Model
 {
-    public abstract class ModelBase
+    public abstract class ModelBase : ObservableObject
     {
     }
 }

@@ -11,7 +11,7 @@ using StartReader.DataExchange.Request;
 using StartReader.DataExchange.Response;
 using Windows.ApplicationModel.AppService;
 using Windows.Web.Http;
-using Opportunity.ChakraBridge.UWP;
+using Opportunity.ChakraBridge.WinRT;
 
 namespace StartReader.ExtensionProvider
 {
@@ -24,6 +24,8 @@ namespace StartReader.ExtensionProvider
         }
 
         private static readonly Regex idReg = new Regex(@"^.+/(\d+)/?.+?$");
+
+        private static readonly JsRuntime jsrt = JsRuntime.Create();
 
         private static readonly Uri searchUri = new Uri("https://www.miaobige.com/search/");
         protected override async Task<SearchResponse> SearchAsync(SearchRequest request)
@@ -153,27 +155,25 @@ namespace StartReader.ExtensionProvider
             if (script != null)
             {
                 var scr = script.GetInnerText();
-                using (var rt = JsRuntime.Create())
+                var uri = "/ajax/content/";
+                var data = default(Dictionary<string, string>);
+                IJsValue post(IJsFunction callee, IJsObject caller, bool isConstructCall, IReadOnlyList<IJsValue> arguments)
                 {
-                    var context = JsContext.Current = rt.CreateContext();
-                    JsContext.RunScript(@"
-var $ = 
-{
-    post: function(uri,data,cb)
-    {
-        this.uri = uri;
-        this.data = JSON.stringify(data);
-    }
-};");
-                    JsContext.RunScript(scr);
-                    var uri = JsContext.RunScript("$.uri").ToString().CoalesceNullOrEmpty("/ajax/content/");
-                    var data = JsonConvert.DeserializeObject<IDictionary<string, string>>(JsContext.RunScript("$.data").ToString());
-                    JsContext.Current = null;
-                    var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
-                    var contentDoc = new HtmlDocument();
-                    contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);
-                    content = contentDoc.DocumentNode;
+                    uri = arguments[0].ToString().CoalesceNullOrEmpty("/ajax/content/");
+                    data = ((IDictionary<string, IJsValue>)arguments[1]).ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
+                    return JsUndefined.Instance;
                 }
+                using (jsrt.CreateContext().Use(true))
+                {
+                    var jq = JsObject.Create();
+                    jq["post"] = JsFunction.Create(post);
+                    JsValue.GlobalObject["$"] = jq;
+                    JsContext.RunScript(scr);
+                }
+                var realContent = await Post(new Uri(uri, UriKind.RelativeOrAbsolute), new HttpFormUrlEncodedContent(data));
+                var contentDoc = new HtmlDocument();
+                contentDoc.Load((await realContent.Content.ReadAsBufferAsync()).AsStream(), document.DeclaredEncoding);
+                content = contentDoc.DocumentNode;
             }
             chapter.Content = string.Join("\n", content.Elements("p").EmptyIfNull().Select(p => p.GetInnerText()));
 
